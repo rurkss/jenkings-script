@@ -1,32 +1,19 @@
 def call() {
-    pipeline {
-        agent {
-            kubernetes {
-                label 'maven-agent'
-                defaultContainer 'maven'
-                yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    some-label: maven
-spec:
-  containers:
-  - name: maven
-    image: maven:3.8.4-jdk-11
-    command:
-    - cat
-    tty: true
-"""
-            }
-        }
-
-        stages {
+    podTemplate(
+        label: 'maven-agent',
+        containers: [
+            containerTemplate(
+                name: 'maven',
+                image: 'maven:3.8.4-jdk-11',
+                command: 'cat',
+                ttyEnabled: true
+            )
+        ]
+    ) {
+        node('maven-agent') {
             stage('Run Maven Version') {
-                steps {
-                    container('maven') {
-                        sh 'mvn --version'
-                    }
+                container('maven') {
+                    sh 'mvn --version'
                 }
             }
         }

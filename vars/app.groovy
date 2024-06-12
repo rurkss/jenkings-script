@@ -4,7 +4,7 @@ def call() {
     pipeline {
         agent {
             kubernetes {
-            yaml '''
+                yaml '''
                 apiVersion: v1
                 kind: Pod
                 spec:
@@ -24,19 +24,19 @@ def call() {
         }
         stages {
             stage('Run maven') {
-            steps {
-                container('maven') {
-                sh 'mvn -version'
-                sh ' echo Hello World > hello.txt'
-                sh 'ls -last'
+                steps {
+                    container('maven') {
+                        sh 'mvn -version'
+                        sh ' echo Hello World > hello.txt'
+                        sh 'ls -last'
+                    }
+                    container('node') {
+                        sh 'npm version'
+                        sh 'cat hello.txt'
+                        sh 'ls -last'
+                    }
                 }
-                container('node') {
-                sh 'npm version'
-                sh 'cat hello.txt'
-                sh 'ls -last'
-                }
-            }
             }
         }
-}
+    }
 }

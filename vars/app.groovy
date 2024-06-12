@@ -1,41 +1,33 @@
-#!groovy
-
 def call() {
     pipeline {
         agent {
             kubernetes {
-            yaml '''
-                apiVersion: v1
-                kind: Pod
-                spec:
-                containers:
-                - name: maven
-                    image: maven:alpine
-                    command:
-                    - cat
-                    tty: true
-                - name: node
-                    image: node:16-alpine3.12
-                    command:
-                    - cat
-                    tty: true
-                '''
+                label 'maven-agent'
+                defaultContainer 'maven'
+                yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: maven
+spec:
+  containers:
+  - name: maven
+    image: maven:3.8.4-jdk-11
+    command:
+    - cat
+    tty: true
+"""
             }
         }
+
         stages {
-            stage('Run maven') {
-            steps {
-                container('maven') {
-                sh 'mvn -version'
-                sh ' echo Hello World > hello.txt'
-                sh 'ls -last'
+            stage('Run Maven Version') {
+                steps {
+                    container('maven') {
+                        sh 'mvn --version'
+                    }
                 }
-                container('node') {
-                sh 'npm version'
-                sh 'cat hello.txt'
-                sh 'ls -last'
-                }
-            }
             }
         }
     }

@@ -43,25 +43,29 @@ def call() {
         }
     }
 
+    def parallelStages = [:]
     for (int i = 0; i < env.LOOP_COUNT.toInteger(); i++) {
-        podTemplate(
-            label: "nested-agent-${i}",
-            containers: [
-                containerTemplate(
-                    name: 'busybox',
-                    image: 'busybox',
-                    command: 'cat',
-                    ttyEnabled: true
-                )
-            ]
-        ) {
-            node("nested-agent-${i}") {
-                stage("Nested Pod Stage ${i+1}") {
-                    container('busybox') {
-                        stage('Sleep for 2 Seconds in Nested Pod') {
-                            sh 'sleep 2'
+        def index = i // need to capture the loop variable
+        parallelStages["Nested Pod Stage ${index+1}"] = {
+            podTemplate(
+                label: "nested-agent-${index}",
+                containers: [
+                    containerTemplate(
+                        name: 'busybox',
+                        image: 'busybox',
+                        command: 'cat',
+                        ttyEnabled: true
+                    )
+                ]
+            ) {
+                node("nested-agent-${index}") {
+                    stage('Sleep for 2 Minutes in Nested Pod') {
+                        container('busybox') {
+                            sh 'sleep 120'
                         }
-                        stage('Unstash and Read File in Nested Pod') {
+                    }
+                    stage('Unstash and Read File in Nested Pod') {
+                        container('busybox') {
                             script {
                                 echo "Files before unstashing:"
                                 sh 'ls -l'
@@ -81,5 +85,9 @@ def call() {
                 }
             }
         }
+    }
+
+    stage('Run Nested Agents in Parallel') {
+        parallel parallelStages
     }
 }

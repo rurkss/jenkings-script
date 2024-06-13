@@ -57,6 +57,9 @@ def call() {
                     '''
                 }
             }
+            stage('Sleep for 4 Minutes in Nested Pod') {
+                sh 'sleep 240'
+            }
         }
     }
 }

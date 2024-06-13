@@ -23,30 +23,41 @@ def call() {
                 }
             }
 
-            stage('Nested Pod Stage') {
-                podTemplate(
-                    label: 'nested-agent',
-                    containers: [
-                        containerTemplate(
-                            name: 'busybox',
-                            image: 'busybox',
-                            command: 'cat',
-                            ttyEnabled: true
-                        )
-                    ]
-                ) {
-                    node('nested-agent') {
-                        container('busybox') {
-                            stage('Run Hello World in Nested Pod') {
-                                script {
-                                    echo "Using busybox-agent Pod IP: ${env.POD_IP}"
-                                    sh "echo busybox-agent Pod IP: ${env.POD_IP}"
-                                }
-                            }
-                            stage('Create Hello World File in Nested Pod') {
-                                sh 'echo "Hello, World!" > /tmp/hello.txt'
-                            }
-                        }
+            stage('Create and Archive File in busybox-agent') {
+                container('busybox') {
+                    sh '''
+                        echo "This is a test file from busybox-agent" > /tmp/testfile.txt
+                        echo "busybox-agent Pod IP: ${POD_IP}" >> /tmp/testfile.txt
+                        tar -cvf /tmp/testfile.tar -C /tmp testfile.txt
+                    '''
+                    archiveArtifacts artifacts: '/tmp/testfile.tar', allowEmptyArchive: true
+                }
+            }
+        }
+    }
+
+    podTemplate(
+        label: 'nested-agent',
+        containers: [
+            containerTemplate(
+                name: 'busybox',
+                image: 'busybox',
+                command: 'cat',
+                ttyEnabled: true
+            )
+        ]
+    ) {
+        node('nested-agent') {
+            stage('Decompress and Read File in Nested Pod') {
+                container('busybox') {
+                    script {
+                        // Copy the archived file from Jenkins workspace to the nested-agent pod
+                        sh 'cp ${WORKSPACE}/testfile.tar /tmp/testfile.tar'
+                        // Decompress and read the file
+                        sh '''
+                            tar -xvf /tmp/testfile.tar -C /tmp
+                            cat /tmp/testfile.txt
+                        '''
                     }
                 }
             }

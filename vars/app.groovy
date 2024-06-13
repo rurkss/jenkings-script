@@ -1,5 +1,10 @@
+def getCloud() {
+    return 'app-beta-hq'
+}
+
 def call() {
     podTemplate(
+        cloud: getCloud(),
         label: 'busybox-agent',
         containers: [
             containerTemplate(
@@ -56,6 +61,7 @@ def call() {
                     def index = taskIndex // need to capture the loop variable
                     parallelStages["Nested Pod Task ${index + 1}"] = {
                         podTemplate(
+                            cloud: getCloud(),
                             label: "nested-agent-${index}",
                             containers: [
                                 containerTemplate(
@@ -68,8 +74,8 @@ def call() {
                         ) {
                             node("nested-agent-${index}") {
                                 container('busybox') {
-                                    stage('Sleep for 2 Seconds in Nested Pod') {
-                                        sh 'sleep 2'
+                                    stage('Sleep for 2 Minutes in Nested Pod') {
+                                        sh 'sleep 120'
                                     }
                                     stage('Unstash and Read File in Nested Pod') {
                                         script {

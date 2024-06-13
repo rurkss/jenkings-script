@@ -54,6 +54,8 @@ def call() {
                     sh '''
                         tar -xvf testfile.tar
                         cat testfile.txt
+                        ls -all
+                        echo pwd
                     '''
                 }
             }

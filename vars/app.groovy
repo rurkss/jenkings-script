@@ -56,12 +56,12 @@ def call() {
                         cat testfile.txt
                         ls -all
                         echo "Nested-agent Pod IP: $(hostname -i)"
-                        echo "Current working directory after decompressing the archive:" pwd
+                        echo "Current working directory after decompressing the archive: $(pwd)"
                     '''
                 }
             }
-            stage('Sleep for 2 Minutes in Nested Pod') {
-                sh 'sleep 120'
+            stage('Sleep for 4 Minutes in Nested Pod') {
+                sh 'sleep 240'
             }
         }
     }

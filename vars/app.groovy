@@ -15,7 +15,7 @@ def call() {
                 container('busybox') {
                     script {
                         env.POD_IP = sh(
-                            script: 'hostname -I',
+                            script: 'hostname -i',
                             returnStdout: true
                         ).trim()
                         echo "busybox-agent Pod IP: ${env.POD_IP}"
@@ -66,7 +66,7 @@ def call() {
                         sh 'ls -l'
                     }
                     sh '''
-                        echo "Nested-agent Pod IP: $(hostname -I)"
+                        echo "Nested-agent Pod IP: $(hostname -i)"
                         tar -xvf testfile.tar
                         echo "Current working directory after decompressing the archive:"
                         pwd

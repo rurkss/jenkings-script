@@ -33,28 +33,30 @@ def call() {
                     stash includes: '/tmp/testfile.tar', name: 'testfile-tar'
                 }
             }
-        }
-    }
 
-    podTemplate(
-        label: 'nested-agent',
-        containers: [
-            containerTemplate(
-                name: 'busybox',
-                image: 'busybox',
-                command: 'cat',
-                ttyEnabled: true
-            )
-        ]
-    ) {
-        node('nested-agent') {
-            stage('Unstash and Read File in Nested Pod') {
-                container('busybox') {
-                    unstash 'testfile-tar'
-                    sh '''
-                        tar -xvf /tmp/testfile.tar -C /tmp
-                        cat /tmp/testfile.txt
-                    '''
+            stage('Nested Pod Stage') {
+                podTemplate(
+                    label: 'nested-agent',
+                    containers: [
+                        containerTemplate(
+                            name: 'busybox',
+                            image: 'busybox',
+                            command: 'cat',
+                            ttyEnabled: true
+                        )
+                    ]
+                ) {
+                    node('nested-agent') {
+                        container('busybox') {
+                            stage('Unstash and Read File in Nested Pod') {
+                                unstash 'testfile-tar'
+                                sh '''
+                                    tar -xvf /tmp/testfile.tar -C /tmp
+                                    cat /tmp/testfile.txt
+                                '''
+                            }
+                        }
+                    }
                 }
             }
         }

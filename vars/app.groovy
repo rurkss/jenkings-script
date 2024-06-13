@@ -50,13 +50,13 @@ def call() {
         node('nested-agent') {
             stage('Unstash and Read File in Nested Pod') {
                 container('busybox') {
+                    unstash 'testfile-tar'
                     sh '''
-                        unstash testfile-tar
                         tar -xvf testfile.tar
-                        echo "Current working directory after decompressing the archive:"
-                        pwd
                         cat testfile.txt
+                        ls -all
                         echo "Nested-agent Pod IP: $(hostname -i)"
+                        echo "Current working directory after decompressing the archive:" pwd
                     '''
                 }
             }
@@ -66,5 +66,4 @@ def call() {
         }
     }
 }
-
 // /home/jenkins/agent/workspace/test-job-2@tmp/durable-362ea5bb/script.sh.copy

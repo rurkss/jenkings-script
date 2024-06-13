@@ -52,12 +52,12 @@ def call() {
                 container('busybox') {
                     unstash 'testfile-tar'
                     sh '''
-                        echo "Nested-agent Pod IP: $(hostname -i)"
                         unstash testfile-tar
                         tar -xvf testfile.tar
                         echo "Current working directory after decompressing the archive:"
                         pwd
                         cat testfile.txt
+                        echo "Nested-agent Pod IP: $(hostname -i)"
                     '''
                 }
             }
@@ -67,3 +67,5 @@ def call() {
         }
     }
 }
+
+// /home/jenkins/agent/workspace/test-job-2@tmp/durable-362ea5bb/script.sh.copy

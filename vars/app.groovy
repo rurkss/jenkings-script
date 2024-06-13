@@ -2,6 +2,18 @@ def getCloud() {
     return 'app-beta-hq'
 }
 
+def getResources() {
+    return [
+        limits: [
+            memory: '500Mi'
+        ],
+        requests: [
+            cpu: '100m',
+            memory: '500Mi'
+        ]
+    ]
+}
+
 def call() {
     podTemplate(
         cloud: getCloud(),
@@ -11,7 +23,10 @@ def call() {
                 name: 'busybox',
                 image: 'busybox',
                 command: 'cat',
-                ttyEnabled: true
+                ttyEnabled: true,
+                resourceRequestMemory: getResources().requests.memory,
+                resourceRequestCpu: getResources().requests.cpu,
+                resourceLimitMemory: getResources().limits.memory
             )
         ]
     ) {
@@ -68,7 +83,10 @@ def call() {
                                     name: 'busybox',
                                     image: 'busybox',
                                     command: 'cat',
-                                    ttyEnabled: true
+                                    ttyEnabled: true,
+                                    resourceRequestMemory: getResources().requests.memory,
+                                    resourceRequestCpu: getResources().requests.cpu,
+                                    resourceLimitMemory: getResources().limits.memory
                                 )
                             ]
                         ) {

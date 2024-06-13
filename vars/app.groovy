@@ -52,7 +52,7 @@ def call() {
                 container('busybox') {
                     unstash 'testfile-tar'
                     sh '''
-                        echo "Nested-agent Pod IP: $(hostname -I)"
+                        echo "Nested-agent Pod IP: $(hostname -i)"
                         unstash testfile-tar
                         tar -xvf testfile.tar
                         echo "Current working directory after decompressing the archive:"

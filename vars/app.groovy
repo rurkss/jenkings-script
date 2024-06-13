@@ -33,31 +33,33 @@ def call() {
                     archiveArtifacts artifacts: '/tmp/testfile.tar', allowEmptyArchive: true
                 }
             }
-        }
-    }
 
-    podTemplate(
-        label: 'nested-agent',
-        containers: [
-            containerTemplate(
-                name: 'busybox',
-                image: 'busybox',
-                command: 'cat',
-                ttyEnabled: true
-            )
-        ]
-    ) {
-        node('nested-agent') {
-            stage('Decompress and Read File in Nested Pod') {
-                container('busybox') {
-                    script {
-                        // Copy the archived file from Jenkins workspace to the nested-agent pod
-                        sh 'cp ${WORKSPACE}/testfile.tar /tmp/testfile.tar'
-                        // Decompress and read the file
-                        sh '''
-                            tar -xvf /tmp/testfile.tar -C /tmp
-                            cat /tmp/testfile.txt
-                        '''
+            stage('Nested Pod Stage') {
+                podTemplate(
+                    label: 'nested-agent',
+                    containers: [
+                        containerTemplate(
+                            name: 'busybox',
+                            image: 'busybox',
+                            command: 'cat',
+                            ttyEnabled: true
+                        )
+                    ]
+                ) {
+                    node('nested-agent') {
+                        container('busybox') {
+                            stage('Decompress and Read File in Nested Pod') {
+                                script {
+                                    // Copy the archived file from Jenkins workspace to the nested-agent pod
+                                    sh 'cp ${WORKSPACE}/testfile.tar /tmp/testfile.tar'
+                                    // Decompress and read the file
+                                    sh '''
+                                        tar -xvf /tmp/testfile.tar -C /tmp
+                                        cat /tmp/testfile.txt
+                                    '''
+                                }
+                            }
+                        }
                     }
                 }
             }

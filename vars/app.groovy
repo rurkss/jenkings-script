@@ -23,44 +23,38 @@ def call() {
                 }
             }
 
-            stage('Create and Archive File in busybox-agent') {
+            stage('Create and Stash File in busybox-agent') {
                 container('busybox') {
                     sh '''
                         echo "This is a test file from busybox-agent" > /tmp/testfile.txt
                         echo "busybox-agent Pod IP: ${POD_IP}" >> /tmp/testfile.txt
                         tar -cvf /tmp/testfile.tar -C /tmp testfile.txt
                     '''
-                    archiveArtifacts artifacts: '/tmp/testfile.tar', allowEmptyArchive: true
+                    stash includes: '/tmp/testfile.tar', name: 'testfile-tar'
                 }
             }
+        }
+    }
 
-            stage('Nested Pod Stage') {
-                podTemplate(
-                    label: 'nested-agent',
-                    containers: [
-                        containerTemplate(
-                            name: 'busybox',
-                            image: 'busybox',
-                            command: 'cat',
-                            ttyEnabled: true
-                        )
-                    ]
-                ) {
-                    node('nested-agent') {
-                        container('busybox') {
-                            stage('Decompress and Read File in Nested Pod') {
-                                script {
-                                    // Copy the archived file from Jenkins workspace to the nested-agent pod
-                                    sh 'cp ${WORKSPACE}/testfile.tar /tmp/testfile.tar'
-                                    // Decompress and read the file
-                                    sh '''
-                                        tar -xvf /tmp/testfile.tar -C /tmp
-                                        cat /tmp/testfile.txt
-                                    '''
-                                }
-                            }
-                        }
-                    }
+    podTemplate(
+        label: 'nested-agent',
+        containers: [
+            containerTemplate(
+                name: 'busybox',
+                image: 'busybox',
+                command: 'cat',
+                ttyEnabled: true
+            )
+        ]
+    ) {
+        node('nested-agent') {
+            stage('Unstash and Read File in Nested Pod') {
+                container('busybox') {
+                    unstash 'testfile-tar'
+                    sh '''
+                        tar -xvf /tmp/testfile.tar -C /tmp
+                        cat /tmp/testfile.txt
+                    '''
                 }
             }
         }

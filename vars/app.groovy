@@ -50,7 +50,6 @@ def call() {
         node('nested-agent') {
             stage('Unstash and Read File in Nested Pod') {
                 container('busybox') {
-                    unstash 'testfile-tar'
                     sh '''
                         unstash testfile-tar
                         tar -xvf testfile.tar

@@ -1,19 +1,3 @@
-def getCloud() {
-    return 'app-beta-hq'
-}
-
-def getResources() {
-    return [
-        limits: [
-            memory: '500Mi'
-        ],
-        requests: [
-            cpu: '100m',
-            memory: '500Mi'
-        ]
-    ]
-}
-
 def call() {
     podTemplate(
         cloud: getCloud(),
@@ -35,7 +19,7 @@ def call() {
                 container('busybox') {
                     script {
                         env.POD_IP = sh(
-                            script: 'hostname -i',
+                            script: 'hostname -I',
                             returnStdout: true
                         ).trim()
                         echo "busybox-agent Pod IP: ${env.POD_IP}"
@@ -79,21 +63,13 @@ def call() {
                             cloud: getCloud(),
                             label: "nested-agent-${index}",
                             containers: [
-                                containerTemplate(
-                                    name: 'busybox',
-                                    image: 'busybox',
-                                    command: 'cat',
-                                    ttyEnabled: true,
-                                    resourceRequestMemory: getResources().requests.memory,
-                                    resourceRequestCpu: getResources().requests.cpu,
-                                    resourceLimitMemory: getResources().limits.memory
-                                )
+                                multyContainerTemplate(index)
                             ]
                         ) {
                             node("nested-agent-${index}") {
                                 container('busybox') {
-                                    stage('Sleep for 2 Seconds in Nested Pod') {
-                                        sh 'sleep 2'
+                                    stage('Sleep for 2 Minutes in Nested Pod') {
+                                        sh 'sleep 120'
                                     }
                                     stage('Unstash and Read File in Nested Pod') {
                                         script {
@@ -104,7 +80,7 @@ def call() {
                                             sh 'ls -l'
                                         }
                                         sh '''
-                                            echo "Nested-agent Pod IP: $(hostname -i)"
+                                            echo "Nested-agent Pod IP: $(hostname -I)"
                                             tar -xvf testfile.tar
                                             echo "Current working directory after decompressing the archive:"
                                             pwd

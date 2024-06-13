@@ -55,7 +55,7 @@ def call() {
         node('nested-agent') {
             container('busybox') {
                 stage('Sleep for 2 Minutes in Nested Pod') {
-                    sh 'sleep 120'
+                    sh 'sleep 2'
                 }
                 stage('Unstash and Read File in Nested Pod') {
                     script {

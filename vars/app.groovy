@@ -19,7 +19,7 @@ def call() {
                 container('busybox') {
                     script {
                         env.POD_IP = sh(
-                            script: 'hostname -I',
+                            script: 'hostname -i',
                             returnStdout: true
                         ).trim()
                         echo "busybox-agent Pod IP: ${env.POD_IP}"
@@ -68,8 +68,8 @@ def call() {
                         ) {
                             node("nested-agent-${index}") {
                                 container('busybox') {
-                                    stage('Sleep for 2 Minutes in Nested Pod') {
-                                        sh 'sleep 120'
+                                    stage('Sleep for 2 Sec in Nested Pod') {
+                                        sh 'sleep 2'
                                     }
                                     stage('Unstash and Read File in Nested Pod') {
                                         script {
@@ -80,7 +80,7 @@ def call() {
                                             sh 'ls -l'
                                         }
                                         sh '''
-                                            echo "Nested-agent Pod IP: $(hostname -I)"
+                                            echo "Nested-agent Pod IP: $(hostname -i)"
                                             tar -xvf testfile.tar
                                             echo "Current working directory after decompressing the archive:"
                                             pwd

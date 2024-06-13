@@ -52,15 +52,17 @@ def call() {
                 container('busybox') {
                     unstash 'testfile-tar'
                     sh '''
+                        echo "Nested-agent Pod IP: $(hostname -I)"
+                        unstash testfile-tar
                         tar -xvf testfile.tar
+                        echo "Current working directory after decompressing the archive:"
+                        pwd
                         cat testfile.txt
-                        ls -all
-                        echo pwd
                     '''
                 }
             }
-            stage('Sleep for 4 Minutes in Nested Pod') {
-                sh 'sleep 240'
+            stage('Sleep for 2 Minutes in Nested Pod') {
+                sh 'sleep 120'
             }
         }
     }

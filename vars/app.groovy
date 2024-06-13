@@ -15,7 +15,7 @@ def call() {
                 container('busybox') {
                     script {
                         env.POD_IP = sh(
-                            script: 'hostname -i',
+                            script: 'hostname -I',
                             returnStdout: true
                         ).trim()
                         echo "busybox-agent Pod IP: ${env.POD_IP}"
@@ -29,8 +29,13 @@ def call() {
                         echo "This is a test file from busybox-agent" > testfile.txt
                         echo "busybox-agent Pod IP: ${POD_IP}" >> testfile.txt
                         tar -cvf testfile.tar testfile.txt
+                        echo "Files before stashing:"
+                        ls -l
                     '''
                     stash includes: 'testfile.tar', name: 'testfile-tar'
+                    script {
+                        echo "Files stashed as 'testfile-tar'"
+                    }
                 }
             }
         }
@@ -48,22 +53,27 @@ def call() {
         ]
     ) {
         node('nested-agent') {
-            stage('Unstash and Read File in Nested Pod') {
-                container('busybox') {
-                    unstash 'testfile-tar'
+            container('busybox') {
+                stage('Sleep for 2 Minutes in Nested Pod') {
+                    sh 'sleep 120'
+                }
+                stage('Unstash and Read File in Nested Pod') {
+                    script {
+                        echo "Files before unstashing:"
+                        sh 'ls -l'
+                        unstash 'testfile-tar'
+                        echo "Files after unstashing:"
+                        sh 'ls -l'
+                    }
                     sh '''
+                        echo "Nested-agent Pod IP: $(hostname -I)"
                         tar -xvf testfile.tar
+                        echo "Current working directory after decompressing the archive:"
+                        pwd
                         cat testfile.txt
-                        ls -all
-                        echo "Nested-agent Pod IP: $(hostname -i)"
-                        echo "Current working directory after decompressing the archive: $(pwd)"
                     '''
                 }
-            }
-            stage('Sleep for 4 Minutes in Nested Pod') {
-                sh 'sleep 240'
             }
         }
     }
 }
-// /home/jenkins/agent/workspace/test-job-2@tmp/durable-362ea5bb/script.sh.copy

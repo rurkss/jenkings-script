@@ -15,10 +15,12 @@ def call() {
                 container('busybox') {
                     script {
                         env.POD_IP = sh(
-                            script: 'hostname -i',
+                            script: 'hostname -I',
                             returnStdout: true
                         ).trim()
                         echo "busybox-agent Pod IP: ${env.POD_IP}"
+                        env.LOOP_COUNT = 3
+                        echo "Number of loops: ${env.LOOP_COUNT}"
                     }
                 }
             }
@@ -41,37 +43,41 @@ def call() {
         }
     }
 
-    podTemplate(
-        label: 'nested-agent',
-        containers: [
-            containerTemplate(
-                name: 'busybox',
-                image: 'busybox',
-                command: 'cat',
-                ttyEnabled: true
-            )
-        ]
-    ) {
-        node('nested-agent') {
-            container('busybox') {
-                stage('Sleep for 2 Minutes in Nested Pod') {
-                    sh 'sleep 2'
-                }
-                stage('Unstash and Read File in Nested Pod') {
-                    script {
-                        echo "Files before unstashing:"
-                        sh 'ls -l'
-                        unstash 'testfile-tar'
-                        echo "Files after unstashing:"
-                        sh 'ls -l'
+    for (int i = 0; i < env.LOOP_COUNT.toInteger(); i++) {
+        podTemplate(
+            label: "nested-agent-${i}",
+            containers: [
+                containerTemplate(
+                    name: 'busybox',
+                    image: 'busybox',
+                    command: 'cat',
+                    ttyEnabled: true
+                )
+            ]
+        ) {
+            node("nested-agent-${i}") {
+                stage("Nested Pod Stage ${i+1}") {
+                    container('busybox') {
+                        stage('Sleep for 2 Minutes in Nested Pod') {
+                            sh 'sleep 120'
+                        }
+                        stage('Unstash and Read File in Nested Pod') {
+                            script {
+                                echo "Files before unstashing:"
+                                sh 'ls -l'
+                                unstash 'testfile-tar'
+                                echo "Files after unstashing:"
+                                sh 'ls -l'
+                            }
+                            sh '''
+                                echo "Nested-agent Pod IP: $(hostname -I)"
+                                tar -xvf testfile.tar
+                                echo "Current working directory after decompressing the archive:"
+                                pwd
+                                cat testfile.txt
+                            '''
+                        }
                     }
-                    sh '''
-                        echo "Nested-agent Pod IP: $(hostname -i)"
-                        tar -xvf testfile.tar
-                        echo "Current working directory after decompressing the archive:"
-                        pwd
-                        cat testfile.txt
-                    '''
                 }
             }
         }

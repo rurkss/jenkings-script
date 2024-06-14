@@ -27,7 +27,7 @@ def call() {
             stage('Download Artifacts') {
                 container('busybox') {
                     sh '''
-                        wget -O artifacts.tar.gz "https://github-cloud.githubusercontent.com/alambic/media/734047178/76/16/7616bb61f619d7152fdc362c1944a095babfc8ceb896c4b4a45dc7a82a82866e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5BA2674WPWWEFGQ5%2F20240614%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240614T162211Z&X-Amz-Expires=3600&X-Amz-Signature=2bb874420110d8aa45a23f41b42fe03f2238025caa8e84a167f6068cd121e82e&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=814329025&token=1"
+                        wget -O artifacts.tar.gz "https://github-cloud.githubusercontent.com/alambic/media/734047178/76/16/7616bb61f619d7152fdc362c1944a095babfc8ceb896c4b4a45dc7a82a82866e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5BA2674WPWWEFGQ5%2F20240614%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240614T174608Z&X-Amz-Expires=3600&X-Amz-Signature=93d4f52f9236d21672f55d3148564d868dd157aef247fc14f0daf7da8e29ae65&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=814329025&token=1"
                         echo "Files after downloading:"
                         ls -l
                     '''

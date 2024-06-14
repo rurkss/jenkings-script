@@ -18,29 +18,31 @@ def call() {
             stage('Initial Stage') {
                 container('busybox') {
                     script {
-                        env.POD_IP = sh(
-                            script: 'hostname -i',
-                            returnStdout: true
-                        ).trim()
-                        echo "busybox-agent Pod IP: ${env.POD_IP}"
                         env.LOOP_COUNT = 5
                         echo "Number of loops: ${env.LOOP_COUNT}"
                     }
                 }
             }
 
-            stage('Create and Stash File in busybox-agent') {
+            stage('Download Artifacts') {
                 container('busybox') {
                     sh '''
-                        echo "This is a test file from busybox-agent" > testfile.txt
-                        echo "busybox-agent Pod IP: ${POD_IP}" >> testfile.txt
-                        tar -cvf testfile.tar testfile.txt
+                        wget -O artifacts.tar.gz "https://github-cloud.githubusercontent.com/alambic/media/734047178/76/16/7616bb61f619d7152fdc362c1944a095babfc8ceb896c4b4a45dc7a82a82866e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5BA2674WPWWEFGQ5%2F20240614%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240614T162211Z&X-Amz-Expires=3600&X-Amz-Signature=2bb874420110d8aa45a23f41b42fe03f2238025caa8e84a167f6068cd121e82e&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=814329025&token=1"
+                        echo "Files after downloading:"
+                        ls -l
+                    '''
+                }
+            }
+
+            stage('Stash Artifacts') {
+                container('busybox') {
+                    sh '''
                         echo "Files before stashing:"
                         ls -l
                     '''
-                    stash includes: 'testfile.tar', name: 'testfile-tar'
+                    stash includes: 'artifacts.tar.gz', name: 'artifacts-tar-gz'
                     script {
-                        echo "Files stashed as 'testfile-tar'"
+                        echo "Files stashed as 'artifacts-tar-gz'"
                     }
                 }
             }
@@ -68,23 +70,21 @@ def call() {
                         ) {
                             node("nested-agent-${index}") {
                                 container('busybox') {
-                                    stage('Sleep for 2 Sec in Nested Pod') {
-                                        sh 'sleep 2'
-                                    }
-                                    stage('Unstash and Read File in Nested Pod') {
+                                    stage('Unstash Artifacts in Nested Pod') {
                                         script {
                                             echo "Files before unstashing:"
                                             sh 'ls -l'
-                                            unstash 'testfile-tar'
+                                            unstash 'artifacts-tar-gz'
                                             echo "Files after unstashing:"
                                             sh 'ls -l'
                                         }
+                                    }
+                                    stage('Extract Artifacts in Nested Pod') {
                                         sh '''
-                                            echo "Nested-agent Pod IP: $(hostname -i)"
-                                            tar -xvf testfile.tar
+                                            tar -xvf artifacts.tar.gz
                                             echo "Current working directory after decompressing the archive:"
                                             pwd
-                                            cat testfile.txt
+                                            ls -l
                                         '''
                                     }
                                 }

@@ -18,7 +18,7 @@ def call() {
             stage('Initial Stage') {
                 container('busybox') {
                     script {
-                        env.LOOP_COUNT = 5
+                        env.LOOP_COUNT = 1
                         echo "Number of loops: ${env.LOOP_COUNT}"
                     }
                 }
@@ -81,7 +81,7 @@ def call() {
                                     }
                                     stage('Extract Artifacts in Nested Pod') {
                                         sh '''
-                                            tar -xvf artifacts.tar.gz
+                                            tar -xf artifacts.tar.gz
                                             echo "Current working directory after decompressing the archive:"
                                             pwd
                                             ls -l

@@ -4,10 +4,10 @@ def call(index) {
         image: 'busybox',
         command: 'cat',
         ttyEnabled: true,
-        resourceRequestMemory: '2Gi',
-        resourceRequestCpu: '2000m',
-        resourceLimitMemory: '2Gi',
-        resourceRequestEphemeralStorage: '2Gi',
-        resourceLimitEphemeralStorage: '2Gi'
+        resourceRequestMemory: '5Gi',
+        resourceRequestCpu: '3000m',
+        resourceLimitMemory: '5Gi',
+        resourceRequestEphemeralStorage: '5Gi',
+        resourceLimitEphemeralStorage: '5Gi'
     )
 }

@@ -37,13 +37,17 @@ def call(totalTasks, maxParallelTasks) {
                                         }
                                     }
                                     stage('Extract Artifacts in Nested Pod') {
-                                        sh '''
-                                            pwd
-                                            ls -l
-                                            sh extract_artifacts.sh                                            
-                                            echo "Current working directory after running the script:"
-                                            ls -l
-                                        '''
+                                        script {
+                                            def scriptContent = libraryResource 'scripts/extract_artifacts.sh'
+                                            writeFile file: 'extract_artifacts.sh', text: scriptContent
+                                            sh '''
+                                                ls -all
+                                                sh extract_artifacts.sh                                                
+                                                echo "Current working directory after running the script:"
+                                                pwd
+                                                ls -l
+                                            '''
+                                        }
                                     }
                                 }
                             }

@@ -20,7 +20,7 @@ def call(totalTasks, maxParallelTasks) {
                                 container('busybox') {
                                     stage('Download File in Nested Pod') {
                                         sh '''
-                                            wget -O artifacts.tar.gz --no-check-certificate "https://l.station307.com/Ltqs3Lrnuc3ANgqQsNABHp/jsdeps.tar.gz"
+                                            wget -O artifacts.tar.gz  "https://dl.dropboxusercontent.com/scl/fi/7i3c35qq8881ikdm75qzw/jsdeps.tar.gz?rlkey=xfg8jtssr64puoecbi0itdzyh&st=ecnugmcl" --no-check-certificate
                                             echo "Files after downloading:"
                                             ls -l
                                         '''
@@ -36,8 +36,8 @@ def call(totalTasks, maxParallelTasks) {
                                     // }
                                     stage('Extract Artifacts in Nested Pod') {
                                         sh '''
-                                            tar -xf artifacts.tar.gz
-                                            echo "Current working directory after decompressing the archive:"
+                                            bash extract_artifacts.sh
+                                            echo "Current working directory after running the script:"
                                             pwd
                                             ls -l
                                         '''

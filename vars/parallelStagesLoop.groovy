@@ -40,7 +40,7 @@ def call(totalTasks, maxParallelTasks) {
                                         sh '''
                                             pwd
                                             ls -l
-                                            bash extract_artifacts.sh                                            
+                                            sh extract_artifacts.sh                                            
                                             echo "Current working directory after running the script:"
                                             ls -l
                                         '''

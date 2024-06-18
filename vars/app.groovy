@@ -11,8 +11,8 @@ def call() {
                 resourceRequestMemory: getResources().requests.memory,
                 resourceRequestCpu: getResources().requests.cpu,
                 resourceLimitMemory: getResources().limits.memory,
-                resourceRequestEphemeralStorage: '1Gi',
-                resourceLimitEphemeralStorage: '2Gi'
+                resourceRequestEphemeralStorage: '512Mi',
+                resourceLimitEphemeralStorage: '512Mi'
             )
         ]
     ) {

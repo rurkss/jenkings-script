@@ -39,10 +39,11 @@ def call() {
             stage('Stash Artifacts') {
                 container('busybox') {
                     sh '''
+                        touch sample.txt
                         echo "Files before stashing:"
                         ls -l
                     '''
-                    // stash includes: 'artifacts.tar.gz', name: 'artifacts-tar-gz'
+                    stash includes: 'sample.txt', name: 'sample-txt'
                     script {
                         echo "Files stashed as 'artifacts-tar-gz'"
                     }

@@ -18,15 +18,22 @@ def call(totalTasks, maxParallelTasks) {
                         ) {
                             node("nested-agent-${index}") {
                                 container('busybox') {
-                                    stage('Unstash Artifacts in Nested Pod') {
-                                        script {
-                                            echo "Files before unstashing:"
-                                            sh 'ls -l'
-                                            unstash 'artifacts-tar-gz'
-                                            echo "Files after unstashing:"
-                                            sh 'ls -l'
-                                        }
+                                    stage('Download File in Nested Pod') {
+                                        sh '''
+                                            wget -O artifacts.tar.gz "https://l.station307.com/Avh9v23tYkAmeRWJekypLq/jsdeps.tar.gz"
+                                            echo "Files after downloading:"
+                                            ls -l
+                                        '''
                                     }
+                                    // stage('Unstash Artifacts in Nested Pod') {
+                                    //     script {
+                                    //         echo "Files before unstashing:"
+                                    //         sh 'ls -l'
+                                    //         unstash 'artifacts-tar-gz'
+                                    //         echo "Files after unstashing:"
+                                    //         sh 'ls -l'
+                                    //     }
+                                    // }
                                     stage('Extract Artifacts in Nested Pod') {
                                         sh '''
                                             tar -xf artifacts.tar.gz

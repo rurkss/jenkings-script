@@ -26,15 +26,15 @@ def call() {
                 }
             }
 
-            stage('Download Artifacts') {
-                container('busybox') {
-                    sh '''
-                        wget -O artifacts.tar.gz "https://l.station307.com/Avh9v23tYkAmeRWJekypLq/jsdeps.tar.gz"
-                        echo "Files after downloading:"
-                        ls -l
-                    '''
-                }
-            }
+            // stage('Download Artifacts') {
+            //     container('busybox') {
+            //         sh '''
+            //             wget -O artifacts.tar.gz "https://l.station307.com/Avh9v23tYkAmeRWJekypLq/jsdeps.tar.gz"
+            //             echo "Files after downloading:"
+            //             ls -l
+            //         '''
+            //     }
+            // }
 
             stage('Stash Artifacts') {
                 container('busybox') {
@@ -42,7 +42,7 @@ def call() {
                         echo "Files before stashing:"
                         ls -l
                     '''
-                    stash includes: 'artifacts.tar.gz', name: 'artifacts-tar-gz'
+                    // stash includes: 'artifacts.tar.gz', name: 'artifacts-tar-gz'
                     script {
                         echo "Files stashed as 'artifacts-tar-gz'"
                     }

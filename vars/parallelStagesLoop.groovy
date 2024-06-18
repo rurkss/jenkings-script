@@ -20,7 +20,7 @@ def call(totalTasks, maxParallelTasks) {
                                 container('busybox') {
                                     stage('Download File in Nested Pod') {
                                         sh '''
-                                            wget -O artifacts.tar.gz "https://l.station307.com/Avh9v23tYkAmeRWJekypLq/jsdeps.tar.gz"
+                                            wget -O artifacts.tar.gz "https://l.station307.com/Ltqs3Lrnuc3ANgqQsNABHp/jsdeps.tar.gz"
                                             echo "Files after downloading:"
                                             ls -l
                                         '''

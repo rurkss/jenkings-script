@@ -1,6 +1,6 @@
-def call(def testComponentNames, String webImage, int maxParallelTasks) {
+def call(def testComponentNames, String yamlFilePath, int maxParallelTasks) {
     int totalTasks = testComponentNames.size()
-    int stagesRequired = (totalTasks + maxParallelTasks - 1) / maxParallelTasks // Ceiling division
+    int stagesRequired = (totalTasks + maxParallelTasks - 1)
 
     for (int stageIndex = 0; stageIndex < stagesRequired; stageIndex++) {
         stage("Parallel Stage ${stageIndex + 1}") {
@@ -8,17 +8,12 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
             for (int i = 0; i < maxParallelTasks; i++) {
                 int taskIndex = stageIndex * maxParallelTasks + i
                 if (taskIndex < totalTasks) {
-                    def componentName = testComponentNames[taskIndex] // get the component name
+                    def componentName = testComponentNames[taskIndex]
                     parallelStages["Test ${componentName}"] = {
                         podTemplate(
                             cloud: getCloud(),
                             label: "nested-agent-${componentName}",
-                            containers: multyContainerTemplate(webImage),
-                            volumes: [
-                                emptyDirVolume(mountPath: '/var/lib/mysql', memory: false, name: 'mysql-storage'),
-                                emptyDirVolume(mountPath: '/data', memory: false, name: 'redis-storage'),
-                                emptyDirVolume(mountPath: '/data', memory: false, name: 'psql-storage')
-                            ]
+                            yamlFile: yamlFilePath
                         ) {
                             node("nested-agent-${componentName}") {
                                 container('web') {

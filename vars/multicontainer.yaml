@@ -1,0 +1,135 @@
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: web
+    image: image-registry.powerapp.cloud/nitro-web/nitro_web:576f79eb284848004cc6f10c4cf99e299464ae18@sha256:1683130b876fa5bd363d16b67ec51d7de942eeb44befb848b21457366ebb0eb9
+    command: ["sleep", "infinity"]
+    env:
+    - name: DATABASE_GIS_HOST
+      value: "127.0.0.1"
+    - name: DATABASE_GIS_USER
+      value: "postgres"
+    - name: DATABASE_GIS_PASS 
+      value: "password"
+    - name: DATABASE_GIS_NAME
+      value: "power_gis"
+    - name: DATABASE_PASS
+      value: "talkbox"
+    - name: DATABASE_HOST
+      value: "127.0.0.1"
+    - name: CI
+      value: "true"
+    - name: RAILS_ENV
+      value: "test"
+    - name: REDIS_LOGICAL_DB_NAME
+      value: "0"
+    - name: RUBY_VERSION
+      value: "3.0.6"
+    - name: BUNDLER_VERSION
+      value: "2.4.22"
+    - name: RUBY_GEM_VERSION
+      value: "3.3.14"
+    - name: BUNDLE_TO
+      value: "/usr/local/bundle"
+    - name: BUNDLE_FROZEN
+      value: "true"
+    - name: NODE_OPTIONS
+      value: "--max-old-space-size=8192 --openssl-legacy-provider"
+    - name: NODE_VERSION
+      value: "v20.14.0"
+    - name: BABEL_DISABLE_CACHE
+      value: "0"
+    - name: CYPRESS_CACHE_FOLDER
+      value: "/home/app/.cache/yarn/yarn/Cypress"
+    - name: NVM_DIR
+      value: "/home/app/.nvm"
+    - name: NODE_BIN
+      value: "/home/app/.nvm/versions/node/v20.14.0/bin"
+    - name: HOME
+      value: "/home/app"
+      
+    resources:
+      requests:
+        memory: "5Gi"
+        ephemeral-storage: "5Gi"
+        cpu: "2000m"
+      limits:
+        memory: "5Gi"
+        ephemeral-storage: "5Gi"
+        cpu: "2000m"
+
+  - name: redis
+    image: redis:7.2.5-alpine
+    env:
+    - name: ALLOW_EMPTY_PASSWORD
+      value: "true"
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "200m"
+    volumeMounts:
+      - name: redis-storage
+        mountPath: /data
+
+  - name: db
+    image: mysql:8.0.32
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: talkbox
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+    volumeMounts:
+      - name: mysql-storage
+        mountPath: /var/lib/mysql
+  - name: geocoder
+    image: image-registry.powerapp.cloud/power-gis/power-gis:main
+    env:
+    - name: SKIP_DATA_LOADING
+      value: "true"
+    - name: POSTGRES_USER
+      value: "postgres"
+    - name: POSTGRES_PASSWORD
+      value: "password"
+    - name: POSTGRES_DB
+      value: "power_gis"
+    - name: NITRO_USER
+      value: "nitro"
+    - name: NITRO_PASSWORD
+      value: "password"
+    - name: DB_DUMP_KEY_ID
+      value: "KECA4ZKKBSCGP8OUVJO8"
+    - name: DB_DUMP_ACCESS_KEY
+      value: "WITYe4fhZNGtnOrC5azcDByaZKtJw+hFKIBJU6pO"
+    resources:
+      requests:
+        memory: "2Gi"
+        ephemeral-storage: "2Gi"
+        cpu: "500m"
+      limits:
+        memory: "2Gi"
+        ephemeral-storage: "2Gi"
+        cpu: "500m"
+    volumeMounts:
+      - name: psql-storage
+        mountPath: /data
+  volumes:
+    - name: mysql-storage
+      emptyDir: {}
+    - name: redis-storage
+      emptyDir: {}
+    - name: influxdb-storage
+      emptyDir: {}
+    - name: rails-storage
+      emptyDir: {}
+    - name: psql-storage
+      emptyDir: {}
+

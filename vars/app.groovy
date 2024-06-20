@@ -2,6 +2,7 @@ def call() {
     def testComponentNames = ["componentA"]
     String webImage = 'image-registry.powerapp.cloud/nitro-web/nitro_web:576f79eb284848004cc6f10c4cf99e299464ae18@sha256:1683130b876fa5bd363d16b67ec51d7de942eeb44befb848b21457366ebb0eb9'
     int maxParallelTasks = 3
+    String yamlFilePath = 'multicontainer.yaml'
 
     podTemplate(
         cloud: getCloud(),
@@ -37,5 +38,5 @@ def call() {
         }
     }
 
-    parallelStagesLoop(testComponentNames, webImage, maxParallelTasks)
+    parallelStagesLoop(testComponentNames, yamlFilePath, maxParallelTasks)
 }

@@ -32,7 +32,7 @@ def call(String webImage) {
             resourceRequestCpu: '2000m',
             resourceRequestEphemeralStorage: '5Gi',
             resourceLimitMemory: '5Gi',
-            resourceLimitCpu: '2000m',
+            resourceLimitCpu: '3000m',
             resourceLimitEphemeralStorage: '5Gi'
         ),
         containerTemplate(

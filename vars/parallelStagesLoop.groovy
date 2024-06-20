@@ -15,10 +15,9 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             label: "nested-agent-${componentName}",
                             containers: multyContainerTemplate(webImage),
                             volumes: [
-                                emptyDirVolume(mountPath: '/var/lib/mysql', memory: false),
-                                emptyDirVolume(mountPath: '/data', memory: false),
-                                emptyDirVolume(mountPath: '/data', memory: false),
-                                emptyDirVolume(mountPath: '/data', memory: false)
+                                emptyDirVolume(mountPath: '/var/lib/mysql', memory: false, name: 'mysql-storage'),
+                                emptyDirVolume(mountPath: '/data', memory: false, name: 'redis-storage'),
+                                emptyDirVolume(mountPath: '/data', memory: false, name: 'psql-storage')
                             ]
                         ) {
                             node("nested-agent-${componentName}") {

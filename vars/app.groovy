@@ -38,5 +38,5 @@ def call() {
         }
     }
 
-    parallelStagesLoop(testComponentNames, yamlFilePath, maxParallelTasks)
+    parallelStagesLoop(testComponentNames, webImage, maxParallelTasks)
 }

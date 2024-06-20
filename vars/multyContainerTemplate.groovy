@@ -3,8 +3,7 @@ def call(String webImage) {
         containerTemplate(
             name: 'web',
             image: webImage,
-            command: "cat",            
-            ttyEnabled: true,
+            command: "pwd && ls -l",            
             envVars: [
                 envVar(key: 'DATABASE_GIS_HOST', value: '127.0.0.1'),
                 envVar(key: 'DATABASE_GIS_USER', value: 'postgres'),
@@ -28,7 +27,6 @@ def call(String webImage) {
                 envVar(key: 'NODE_BIN', value: '/home/app/.nvm/versions/node/v20.14.0/bin'),
                 envVar(key: 'HOME', value: '/home/app')
             ],
-            workingDir: '/home/app/src',
             resourceRequestMemory: '5Gi',
             resourceRequestCpu: '2000m',
             resourceRequestEphemeralStorage: '5Gi',

@@ -1,6 +1,6 @@
-def call(def testComponentNames, maxParallelTasks) {
+def call(def testComponentNames, String webImage, int maxParallelTasks) {
     int totalTasks = testComponentNames.size()
-    int stagesRequired = (totalTasks + maxParallelTasks - 1) 
+    int stagesRequired = (totalTasks + maxParallelTasks - 1) / maxParallelTasks // Ceiling division
 
     for (int stageIndex = 0; stageIndex < stagesRequired; stageIndex++) {
         stage("Parallel Stage ${stageIndex + 1}") {
@@ -8,17 +8,21 @@ def call(def testComponentNames, maxParallelTasks) {
             for (int i = 0; i < maxParallelTasks; i++) {
                 int taskIndex = stageIndex * maxParallelTasks + i
                 if (taskIndex < totalTasks) {
-                    def componentName = testComponentNames[taskIndex] 
+                    def componentName = testComponentNames[taskIndex] // get the component name
                     parallelStages["Test ${componentName}"] = {
                         podTemplate(
                             cloud: getCloud(),
                             label: "nested-agent-${componentName}",
-                            containers: [
-                                multyContainerTemplate(componentName)
+                            containers: multyContainerTemplate(webImage),
+                            volumes: [
+                                emptyDirVolume(mountPath: '/var/lib/mysql', memory: false),
+                                emptyDirVolume(mountPath: '/data', memory: false),
+                                emptyDirVolume(mountPath: '/data', memory: false),
+                                emptyDirVolume(mountPath: '/data', memory: false)
                             ]
                         ) {
                             node("nested-agent-${componentName}") {
-                                container('busybox') {
+                                container('web') {
                                     stage("Download File for ${componentName}") {
                                         sh '''
                                             wget -O artifacts.tar.gz  "https://dl.dropboxusercontent.com/scl/fi/7i3c35qq8881ikdm75qzw/jsdeps.tar.gz?rlkey=xfg8jtssr64puoecbi0itdzyh&st=ecnugmcl" --no-check-certificate

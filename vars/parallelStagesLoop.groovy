@@ -18,36 +18,34 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             node("nested-agent-${componentName}") {
                                 container('web') {
                                     stage("Download File for ${componentName}") {
-                                        sh '''
-                                            pwd
-                                            ls -l
+                                        sh '''                                            
                                             echo "Files after downloading:"
                                             ls -l
                                         '''
                                     }
-                                    stage("Unstash Artifacts for ${componentName}") {
-                                        script {
-                                            echo "Files before unstashing:"
-                                            sh 'ls -l'
-                                            unstash 'sample-txt'
-                                            // unstash 'artifacts-tar-gz'
-                                            echo "Files after unstashing:"
-                                            sh 'ls -l'
-                                        }
-                                    }
-                                    stage("Extract Artifacts for ${componentName}") {
-                                        script {
-                                            def scriptContent = libraryResource 'scripts/extract_artifacts.sh'
-                                            writeFile file: 'extract_artifacts.sh', text: scriptContent
-                                            sh '''
-                                                ls -all
-                                                sh extract_artifacts.sh                                                
-                                                echo "Current working directory after running the script:"
-                                                pwd
-                                                ls -l
-                                            '''
-                                        }
-                                    }
+                                    // stage("Unstash Artifacts for ${componentName}") {
+                                    //     script {
+                                    //         echo "Files before unstashing:"
+                                    //         sh 'ls -l'
+                                    //         unstash 'sample-txt'
+                                    //         // unstash 'artifacts-tar-gz'
+                                    //         echo "Files after unstashing:"
+                                    //         sh 'ls -l'
+                                    //     }
+                                    // }
+                                    // stage("Extract Artifacts for ${componentName}") {
+                                    //     script {
+                                    //         def scriptContent = libraryResource 'scripts/extract_artifacts.sh'
+                                    //         writeFile file: 'extract_artifacts.sh', text: scriptContent
+                                    //         sh '''
+                                    //             ls -all
+                                    //             sh extract_artifacts.sh                                                
+                                    //             echo "Current working directory after running the script:"
+                                    //             pwd
+                                    //             ls -l
+                                    //         '''
+                                    //     }
+                                    // }
                                 }
                             }
                         }

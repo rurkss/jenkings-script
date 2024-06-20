@@ -1,4 +1,7 @@
 def call() {
+    def testComponentNames = ["componentA", "componentB", "componentC", "componentD"]
+    int maxParallelTasks = 2
+
     podTemplate(
         cloud: getCloud(),
         label: 'busybox-agent',
@@ -17,25 +20,6 @@ def call() {
         ]
     ) {
         node('busybox-agent') {
-            stage('Initial Stage') {
-                container('busybox') {
-                    script {
-                        env.LOOP_COUNT = 1
-                        echo "Number of loops: ${env.LOOP_COUNT}"
-                    }
-                }
-            }
-
-            // stage('Download Artifacts') {
-            //     container('busybox') {
-            //         sh '''
-            //             wget -O artifacts.tar.gz "https://l.station307.com/Avh9v23tYkAmeRWJekypLq/jsdeps.tar.gz"
-            //             echo "Files after downloading:"
-            //             ls -l
-            //         '''
-            //     }
-            // }
-
             stage('Stash Artifacts') {
                 container('busybox') {
                     sh '''
@@ -52,5 +36,5 @@ def call() {
         }
     }
 
-    parallelStagesLoop(env.LOOP_COUNT.toInteger(), 3)
+    parallelStagesLoop(testComponentNames, maxParallelTasks)
 }

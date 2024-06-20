@@ -16,7 +16,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             containers: multyContainerTemplate(webImage)                            
                         ) {
                             node("nested-agent-${componentName}") {
-                                container('web') {
+                                container('redis') {
                                     stage("Download File for ${componentName}") {
                                         sh '''                                            
                                             echo "Files after downloading:"

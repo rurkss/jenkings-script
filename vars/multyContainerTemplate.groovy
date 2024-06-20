@@ -2,7 +2,7 @@ def call(String webImage) {
     return [
         containerTemplate(
             name: 'web',
-            image: webImage, 
+            image: 'busybox', 
             command: 'cat',
             ttyEnabled: true,         
             envVars: [

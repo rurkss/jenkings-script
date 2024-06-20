@@ -2,8 +2,7 @@ def call(String webImage) {
     return [
         containerTemplate(
             name: 'web',
-            image: webImage,
-            command: "cat",            
+            image: webImage,          
             envVars: [
                 envVar(key: 'DATABASE_GIS_HOST', value: '127.0.0.1'),
                 envVar(key: 'DATABASE_GIS_USER', value: 'postgres'),

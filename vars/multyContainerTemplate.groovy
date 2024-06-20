@@ -41,8 +41,7 @@ def call(String webImage) {
             resourceRequestMemory: '256Mi',
             resourceRequestCpu: '100m',
             resourceLimitMemory: '512Mi',
-            resourceLimitCpu: '200m',
-            volumeMounts: [volumeMount(mountPath: '/data', name: 'redis-storage')]
+            resourceLimitCpu: '200m'
         ),
         containerTemplate(
             name: 'db',
@@ -51,8 +50,7 @@ def call(String webImage) {
             resourceRequestMemory: '1Gi',
             resourceRequestCpu: '500m',
             resourceLimitMemory: '1Gi',
-            resourceLimitCpu: '500m',
-            volumeMounts: [volumeMount(mountPath: '/var/lib/mysql', name: 'mysql-storage')]
+            resourceLimitCpu: '500m'
         ),
         containerTemplate(
             name: 'geocoder',
@@ -72,8 +70,7 @@ def call(String webImage) {
             resourceRequestEphemeralStorage: '2Gi',
             resourceLimitMemory: '2Gi',
             resourceLimitCpu: '500m',
-            resourceLimitEphemeralStorage: '2Gi',
-            volumeMounts: [volumeMount(mountPath: '/data', name: 'psql-storage')]
+            resourceLimitEphemeralStorage: '2Gi'
         )
     ]
 }

@@ -13,8 +13,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         podTemplate(
                             cloud: getCloud(),
                             label: "nested-agent-${componentName}",
-                            containers: multyContainerTemplate(webImage),
-                            workspaceVolume: hostPathWorkspaceVolume(hostPath: '/jenkings')                            
+                            containers: multyContainerTemplate(webImage)                     
                         ) {
                             node("nested-agent-${componentName}") {
                                 container('web') {

@@ -19,7 +19,6 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                 stage("Setup Permissions") {
                                     sh '''
                                         echo "Current User and Groups:"
-                                        whoami
                                         id
                                     '''
                                 }

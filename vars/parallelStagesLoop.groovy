@@ -20,41 +20,50 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                     parallel(
                                         'Config.yml': {
                                             unstash 'config-yml'
-                                            sh 'ls -l'
+                                            sh '''        
+                                                mv config.yml /home/app/src/components/config/
+                                                ls -l /home/app/src/components/config/
+                                            '''                                            
                                         },
                                         'Database.yml': {
                                             unstash 'database-yml'
-                                            sh 'ls -l'
+                                            sh '''        
+                                                mv database.yml /home/app/src/components/config/
+                                                ls -l /home/app/src/components/config/
+                                            '''
                                         },
                                         'Ldap.yml': {
                                             unstash 'ldap-yml'
-                                            sh 'ls -l'
-                                        },
-                                        'JsDeps': {
-                                            // unstash 'jsdeps'
                                             sh '''        
-                                                wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/7i3c35qq8881ikdm75qzw/jsdeps.tar.gz?rlkey=xfg8jtssr64puoecbi0itdzyh&st=ecnugmcl" --no-check-certificate  
-                                                echo "Files after downloading:"
-                                                ls -l
-                                                pwd
+                                                mv ldap.yml /home/app/src/components/config/
+                                                ls -l /home/app/src/components/config/
                                             '''
-                                            sh 'ls -l'
-                                        }
+                                        },
+                                        // 'JsDeps': {
+                                        //     // unstash 'jsdeps'
+                                        //     sh '''        
+                                        //         wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/7i3c35qq8881ikdm75qzw/jsdeps.tar.gz?rlkey=xfg8jtssr64puoecbi0itdzyh&st=ecnugmcl" --no-check-certificate  
+                                        //         echo "Files after downloading:"
+                                        //         ls -l
+                                        //         pwd
+                                        //     '''
+                                        //     sh 'ls -l'
+                                        // }
                                     )
                                 }  
-                                stage("Extracting/Copying Artifacts") {
-                                    script {
-                                        def scriptContent = libraryResource 'scripts/extract_artifacts.sh'
-                                        writeFile file: 'extract_artifacts.sh', text: scriptContent
-                                        sh '''
-                                            ls -all
-                                            sh extract_artifacts.sh                                                
-                                            echo "Current working directory after running the script:"
-                                            pwd
-                                            ls -l /home/app/src/config
-                                        '''
-                                    }
-                                }
+                                // stage("Extracting/Copying Artifacts") {
+                                //     script {
+                                //         def scriptContent = libraryResource 'scripts/extract_artifacts.sh'
+                                //         writeFile file: 'extract_artifacts.sh', text: scriptContent
+                                //         sh '''
+                                //             ls -all
+                                //             sh extract_artifacts.sh                                                
+                                //             echo "Current working directory after running the script:"
+                                //             pwd
+                                //             ls -l /home/app/src/config
+                                //         '''
+                                //     }
+                                // }
                             }
                         }
                     }

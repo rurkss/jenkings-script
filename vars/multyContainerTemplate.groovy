@@ -31,10 +31,10 @@ def call(String webImage) {
             workingDir: '/jenkings',
             resourceRequestMemory: '5Gi',
             resourceRequestCpu: '2000m',
-            resourceRequestEphemeralStorage: '5Gi',
+            resourceRequestEphemeralStorage: '3Gi',
             resourceLimitMemory: '5Gi',
             resourceLimitCpu: '3000m',
-            resourceLimitEphemeralStorage: '5Gi'
+            resourceLimitEphemeralStorage: '3Gi'
         ),
         // containerTemplate(
         //     name: 'redis',

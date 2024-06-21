@@ -18,8 +18,9 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             container('web') {
                                 stage("Setup Permissions") {
                                     sh '''
-                                        echo "Jenkins User to Group:"
-                                        groups jenkins
+                                        echo "Current User and Groups:"
+                                        whoami
+                                        id
                                     '''
                                 }
                                 stage("Unstashing Files") {

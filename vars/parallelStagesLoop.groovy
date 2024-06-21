@@ -16,6 +16,12 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                     ) {
                         node("nested-agent-${componentName}") {
                             container('web') {
+                                stage("Setup Permissions") {
+                                    sh '''
+                                        echo "Jenkins User to Group:"
+                                        groups jenkins
+                                    '''
+                                },
                                 stage("Unstashing Files") {
                                     parallel(
                                         'Config.yml': {

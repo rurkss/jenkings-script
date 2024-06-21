@@ -18,19 +18,19 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             container('web') {
                                 stage("Unstashing Files") {
                                     parallel(
-                                        'Config.yml':{
+                                        'Config.yml': {
                                             unstash 'config-yml'
                                             sh 'ls -l'
-                                        }
-                                        'Database.yml':{
+                                        },
+                                        'Database.yml': {
                                             unstash 'database-yml'
                                             sh 'ls -l'
-                                        }
-                                        'Ldap.yml':{
+                                        },
+                                        'Ldap.yml': {
                                             unstash 'ldap-yml'
                                             sh 'ls -l'
-                                        }
-                                        'JsDeps':{
+                                        },
+                                        'JsDeps': {
                                             // unstash 'jsdeps'
                                             sh '''        
                                                 wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/7i3c35qq8881ikdm75qzw/jsdeps.tar.gz?rlkey=xfg8jtssr64puoecbi0itdzyh&st=ecnugmcl" --no-check-certificate  

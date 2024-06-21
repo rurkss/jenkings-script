@@ -30,7 +30,7 @@ def call(String webImage) {
             ],
             runAsUser: '1000',
             resourceRequestMemory: '5Gi',
-            resourceRequestCpu: '2000m',
+            resourceRequestCpu: '3000m',
             resourceRequestEphemeralStorage: '3Gi',
             resourceLimitMemory: '5Gi',
             resourceLimitCpu: '3000m',

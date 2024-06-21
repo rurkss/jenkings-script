@@ -2,7 +2,7 @@
 
 if [ -f "jsdeps.tar.gz" ]; then
     echo "Starting decompression with tar -xf..."
-    time tar -xf jsdeps.tar.gz
+    tar -xf jsdeps.tar.gz
 
     if [ -d "node_modules" ]; then
         echo "Moving node_modules to /home/app/src..."

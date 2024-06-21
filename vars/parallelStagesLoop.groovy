@@ -14,7 +14,9 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             cloud: getCloud(),
                             label: "nested-agent-${componentName}",
                             containers: multyContainerTemplate(webImage),
-                            workingDir: '/jenkins',                     
+                            volumes: [
+                                emptyDirVolume(mountPath: '/jenkins-agent')
+                            ]                   
                         ) {
                             node("nested-agent-${componentName}") {
                                 container('web') {

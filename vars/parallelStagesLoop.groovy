@@ -51,7 +51,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                             sh extract_artifacts.sh                                                
                                             echo "Current working directory after running the script:"
                                             pwd
-                                            ls -l /home/app/src
+                                            ls -l /home/app/src/config
                                         '''
                                     }
                                 }

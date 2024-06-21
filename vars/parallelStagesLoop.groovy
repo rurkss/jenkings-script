@@ -19,9 +19,9 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             envVars: [
                                 envVar(key: 'JENKINS_AGENT_WORKDIR', value: '/jenkins-agent'),
                             ],
-                            volumes: [
-                                emptyDirVolume(mountPath: '/jenkins-agent')
-                            ]                   
+                            // volumes: [
+                            //     emptyDirVolume(mountPath: '/jenkins-agent')
+                            // ]                   
                         ) {
                             node("nested-agent-${componentName}") {
                                 container('web') {

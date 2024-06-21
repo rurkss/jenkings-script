@@ -21,6 +21,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         sh '''                                            
                                             echo "Files after downloading:"
                                             ls -l
+                                            pwd
                                         '''
                                     }
                                     // stage("Unstash Artifacts for ${componentName}") {

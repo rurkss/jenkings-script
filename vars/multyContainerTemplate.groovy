@@ -28,6 +28,8 @@ def call(String webImage) {
                 envVar(key: 'NODE_BIN', value: '/home/app/.nvm/versions/node/v20.14.0/bin'),
                 envVar(key: 'HOME', value: '/home/app')
             ],
+            runAsUser: 'app',
+            runAsGroup; '9999',
             resourceRequestMemory: '5Gi',
             resourceRequestCpu: '2000m',
             resourceRequestEphemeralStorage: '5Gi',

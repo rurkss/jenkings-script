@@ -21,7 +21,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         echo "Jenkins User to Group:"
                                         groups jenkins
                                     '''
-                                },
+                                }
                                 stage("Unstashing Files") {
                                     parallel(
                                         'Config.yml': {

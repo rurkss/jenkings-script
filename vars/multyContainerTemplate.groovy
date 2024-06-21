@@ -37,43 +37,43 @@ def call(String webImage) {
             resourceLimitCpu: '3000m',
             resourceLimitEphemeralStorage: '5Gi'
         ),
-        containerTemplate(
-            name: 'redis',
-            image: 'redis:7.2.5-alpine',
-            envVars: [envVar(key: 'ALLOW_EMPTY_PASSWORD', value: 'true')],
-            resourceRequestMemory: '256Mi',
-            resourceRequestCpu: '100m',
-            resourceLimitMemory: '512Mi',
-            resourceLimitCpu: '200m'
-        ),
-        containerTemplate(
-            name: 'db',
-            image: 'mysql:8.0.32',
-            envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
-            resourceRequestMemory: '1Gi',
-            resourceRequestCpu: '500m',
-            resourceLimitMemory: '1Gi',
-            resourceLimitCpu: '500m'
-        ),
-        containerTemplate(
-            name: 'geocoder',
-            image: 'image-registry.powerapp.cloud/power-gis/power-gis:main',
-            envVars: [
-                envVar(key: 'SKIP_DATA_LOADING', value: 'true'),
-                envVar(key: 'POSTGRES_USER', value: 'postgres'),
-                envVar(key: 'POSTGRES_PASSWORD', value: 'password'),
-                envVar(key: 'POSTGRES_DB', value: 'power_gis'),
-                envVar(key: 'NITRO_USER', value: 'nitro'),
-                envVar(key: 'NITRO_PASSWORD', value: 'password'),
-                envVar(key: 'DB_DUMP_KEY_ID', value: 'KECA4ZKKBSCGP8OUVJO8'),
-                envVar(key: 'DB_DUMP_ACCESS_KEY', value: 'WITYe4fhZNGtnOrC5azcDByaZKtJw+hFKIBJU6pO')
-            ],
-            resourceRequestMemory: '2Gi',
-            resourceRequestCpu: '500m',
-            resourceRequestEphemeralStorage: '2Gi',
-            resourceLimitMemory: '2Gi',
-            resourceLimitCpu: '500m',
-            resourceLimitEphemeralStorage: '2Gi'
-        )
+        // containerTemplate(
+        //     name: 'redis',
+        //     image: 'redis:7.2.5-alpine',
+        //     envVars: [envVar(key: 'ALLOW_EMPTY_PASSWORD', value: 'true')],
+        //     resourceRequestMemory: '256Mi',
+        //     resourceRequestCpu: '100m',
+        //     resourceLimitMemory: '512Mi',
+        //     resourceLimitCpu: '200m'
+        // ),
+        // containerTemplate(
+        //     name: 'db',
+        //     image: 'mysql:8.0.32',
+        //     envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
+        //     resourceRequestMemory: '1Gi',
+        //     resourceRequestCpu: '500m',
+        //     resourceLimitMemory: '1Gi',
+        //     resourceLimitCpu: '500m'
+        // ),
+        // containerTemplate(
+        //     name: 'geocoder',
+        //     image: 'image-registry.powerapp.cloud/power-gis/power-gis:main',
+        //     envVars: [
+        //         envVar(key: 'SKIP_DATA_LOADING', value: 'true'),
+        //         envVar(key: 'POSTGRES_USER', value: 'postgres'),
+        //         envVar(key: 'POSTGRES_PASSWORD', value: 'password'),
+        //         envVar(key: 'POSTGRES_DB', value: 'power_gis'),
+        //         envVar(key: 'NITRO_USER', value: 'nitro'),
+        //         envVar(key: 'NITRO_PASSWORD', value: 'password'),
+        //         envVar(key: 'DB_DUMP_KEY_ID', value: 'KECA4ZKKBSCGP8OUVJO8'),
+        //         envVar(key: 'DB_DUMP_ACCESS_KEY', value: 'WITYe4fhZNGtnOrC5azcDByaZKtJw+hFKIBJU6pO')
+        //     ],
+        //     resourceRequestMemory: '2Gi',
+        //     resourceRequestCpu: '500m',
+        //     resourceRequestEphemeralStorage: '2Gi',
+        //     resourceLimitMemory: '2Gi',
+        //     resourceLimitCpu: '500m',
+        //     resourceLimitEphemeralStorage: '2Gi'
+        // )
     ]
 }

@@ -47,31 +47,31 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                                 ls -l /home/app/src/config/
                                             '''
                                         },
-                                        // 'JsDeps': {
-                                        //     // unstash 'jsdeps'
-                                        //     sh '''        
-                                        //         wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/7i3c35qq8881ikdm75qzw/jsdeps.tar.gz?rlkey=xfg8jtssr64puoecbi0itdzyh&st=ecnugmcl" --no-check-certificate  
-                                        //         echo "Files after downloading:"
-                                        //         ls -l
-                                        //         pwd
-                                        //     '''
-                                        //     sh 'ls -l'
-                                        // }
+                                        'JsDeps': {
+                                            // unstash 'jsdeps'
+                                            sh '''        
+                                                wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/7i3c35qq8881ikdm75qzw/jsdeps.tar.gz?rlkey=xfg8jtssr64puoecbi0itdzyh&st=ecnugmcl" --no-check-certificate  
+                                                echo "Files after downloading:"
+                                                ls -l
+                                                pwd
+                                            '''
+                                            sh 'ls -l'
+                                        }
                                     )
                                 }  
-                                // stage("Extracting/Copying Artifacts") {
-                                //     script {
-                                //         def scriptContent = libraryResource 'scripts/extract_artifacts.sh'
-                                //         writeFile file: 'extract_artifacts.sh', text: scriptContent
-                                //         sh '''
-                                //             ls -all
-                                //             sh extract_artifacts.sh                                                
-                                //             echo "Current working directory after running the script:"
-                                //             pwd
-                                //             ls -l /home/app/src/config
-                                //         '''
-                                //     }
-                                // }
+                                stage("Extracting/Copying Artifacts") {
+                                    script {
+                                        def scriptContent = libraryResource 'scripts/extract_artifacts.sh'
+                                        writeFile file: 'extract_artifacts.sh', text: scriptContent
+                                        sh '''
+                                            ls -all
+                                            sh extract_artifacts.sh                                                
+                                            echo "Current working directory after running the script:"
+                                            pwd
+                                            ls -l /home/app/src/config
+                                        '''
+                                    }
+                                }
                             }
                         }
                     }

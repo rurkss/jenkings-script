@@ -42,18 +42,18 @@ def call(String webImage) {
             image: 'redis:7.2.5-alpine',
             envVars: [envVar(key: 'ALLOW_EMPTY_PASSWORD', value: 'true')],
             resourceRequestMemory: '256Mi',
-            resourceRequestCpu: '100m',
+            resourceRequestCpu: '50m',
             resourceLimitMemory: '512Mi',
-            resourceLimitCpu: '200m'
+            resourceLimitCpu: '100m'
         ),
         containerTemplate(
             name: 'db',
             image: 'mysql:8.0.32',
             envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
             resourceRequestMemory: '1Gi',
-            resourceRequestCpu: '500m',
+            resourceRequestCpu: '100m',
             resourceLimitMemory: '1Gi',
-            resourceLimitCpu: '500m'
+            resourceLimitCpu: '100m'
         ),
         containerTemplate(
             name: 'geocoder',
@@ -69,10 +69,10 @@ def call(String webImage) {
                 envVar(key: 'DB_DUMP_ACCESS_KEY', value: 'WITYe4fhZNGtnOrC5azcDByaZKtJw+hFKIBJU6pO')
             ],
             resourceRequestMemory: '2Gi',
-            resourceRequestCpu: '500m',
+            resourceRequestCpu: '100m',
             resourceRequestEphemeralStorage: '2Gi',
             resourceLimitMemory: '2Gi',
-            resourceLimitCpu: '500m',
+            resourceLimitCpu: '100m',
             resourceLimitEphemeralStorage: '2Gi'
         )
     ]

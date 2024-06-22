@@ -63,10 +63,11 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         writeFile file: 'extract_artifacts.sh', text: scriptContent
                                         sh '''
                                             ls -all
+                                            ls -l /home/app/src/components/sales
                                             sh extract_artifacts.sh                                                
                                             echo "Current working directory after running the script:"
                                             pwd
-                                            ls -l /home/app/src/config
+                                            ls -l /home/app/src/components/sales
                                         '''
                                     }
                                 }

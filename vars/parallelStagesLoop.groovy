@@ -12,7 +12,9 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                     podTemplate(
                         cloud: getCloud(),
                         label: "nested-agent-${componentName}",
-                        containers: multyContainerTemplate(webImage)                                              
+                        containers: multyContainerTemplate(webImage),
+                        runAsUser: 'app',
+                        runAsGroup: 'app',                                              
                     ) {
                         node("nested-agent-${componentName}") {
                             container('web') {
@@ -20,7 +22,6 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                     sh '''
                                         echo "Current User and Groups:"
                                         id
-                                        sudo chmod -R 770 /home
                                     '''
                                 }
                                 stage("Unstashing Files") {

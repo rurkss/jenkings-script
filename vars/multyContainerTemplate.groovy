@@ -29,7 +29,6 @@ def call(String webImage) {
                 envVar(key: 'HOME', value: '/home/app')
             ],
             runAsUser: '1000',
-            runAsGroup: '9999',
             resourceRequestMemory: '5Gi',
             resourceRequestCpu: '3000m',
             resourceRequestEphemeralStorage: '3Gi',

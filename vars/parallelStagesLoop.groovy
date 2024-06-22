@@ -71,6 +71,11 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         '''
                                     }
                                 }
+                                stage("Run Test ${componentName}") {
+                                    sh '''
+                                        cd /home/app/src && bin/cobra cmd business_intelligence ci --no-interactive
+                                    '''
+                                }
                             }
                         }
                     }

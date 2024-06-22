@@ -1,6 +1,6 @@
 def call() {
     def testComponentNames = ["componentA"]
-    String webImage = 'image-registry.powerapp.cloud/nitro-web/nitro_web:PR-40151-8ef1e3d31191c07ce063fc4bfc35c20fd330b96f-25'
+    String webImage = 'image-registry.powerapp.cloud/nitro-web/nitro_web:PR-40151-4be3c24f414d0b48bc0951a44fece306258bb815-27'
     int maxParallelTasks = 3
     String yamlFilePath = 'multicontainer.yaml'
 

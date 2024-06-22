@@ -18,7 +18,7 @@ def call(String webImage) {
                 envVar(key: 'RUBY_VERSION', value: '3.0.6'),
                 envVar(key: 'BUNDLER_VERSION', value: '2.4.22'),
                 envVar(key: 'RUBY_GEM_VERSION', value: '3.3.14'),
-                envVar(key: 'BUNDLE_TO', value: '/usr/local/bundle'),
+                envVar(key: 'BUNDLE_TO', value: '/home/app/bundle'),
                 envVar(key: 'BUNDLE_FROZEN', value: 'true'),
                 envVar(key: 'NODE_OPTIONS', value: '--max-old-space-size=8192 --openssl-legacy-provider'),
                 envVar(key: 'NODE_VERSION', value: 'v20.14.0'),

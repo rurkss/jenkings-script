@@ -20,7 +20,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                     sh '''
                                         echo "Current User and Groups:"
                                         id
-                                        chmod -R 770 /home
+                                        sudo chmod -R 770 /home
                                     '''
                                 }
                                 stage("Unstashing Files") {

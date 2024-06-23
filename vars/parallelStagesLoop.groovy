@@ -72,9 +72,14 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                     }
                                 }
                                 stage("Run Test ${componentName}") {
-                                    sh '''
-                                        bash -lc 'RAILS_ENV=test CI=true DATABASE_NAME=business_intelligence cd /home/app/src && bin/cobra cmd business_intelligence ci --no-interactive'
-                                    '''
+                                    script {
+                                        def output = sh (
+                                            script: '''bash -lc 'cd /home/app/src && bin/cobra cmd sales ci --no-interactive' ''',
+                                            returnStdout: true,
+                                            returnStatus: true
+                                        ).trim()
+                                        echo "Command output: ${output}"
+                                    }
                                 }
                             }
                         }

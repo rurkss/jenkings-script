@@ -73,7 +73,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                 }
                                 stage("Run Test ${componentName}") {
                                     sh '''
-                                        bash -lc 'cd /home/app/src/components/business_intelligence && [ -z $CI ] && yarn check --integrity 2> /dev/null || yarn install'
+                                        bash -l -c 'cd /home/app/src && bin/cobra cmd business_intelligence ci --no-interactive'
                                     '''
                                 }
                             }

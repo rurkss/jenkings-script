@@ -78,7 +78,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         sh '''
                                             mv run_test.sh /home/app/src
                                             chmod +x /home/app/src/run_test.sh
-                                            bash /home/app/src/run_test.sh
+                                            cd /home/app/src
+                                            bash run_test.sh
                                         '''
                                     
                                     }

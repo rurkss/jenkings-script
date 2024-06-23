@@ -72,9 +72,16 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                     }
                                 }
                                 stage("Run Test ${componentName}") {
-                                    sh '''        
-                                        CI=true RAILS_ENV=test DATABASE_NAME=accounting cd /home/app/src && bin/cobra cmd accounting ci
-                                    '''
+                                    script{
+                                        def scriptContent = libraryResource 'scripts/run_test.sh'
+                                        writeFile file: 'run_test.sh', text: scriptContent
+                                        sh '''
+                                            mv run_test.sh /home/app/src
+                                            chmod +x /home/app/src/run_test.sh
+                                            ./run_test.sh
+                                        '''
+                                    
+                                    }
                                 }
                             }
                         }

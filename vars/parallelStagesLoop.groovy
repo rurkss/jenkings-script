@@ -74,7 +74,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                 stage("Run Test ${componentName}") {
                                     script {
                                         def output = sh (
-                                            script: '''bash -lc 'cd /home/app/src && bin/cobra cmd sales ci --no-interactive' ''',
+                                            script: '''bash -lc 'CI=true RAILS_ENV=test DATABASE_NAME=accounting cd /home/app/src && bin/cobra cmd accounting ci --no-interactive' ''',
                                             returnStdout: true,
                                             returnStatus: true
                                         ).trim()

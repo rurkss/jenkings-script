@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 # Set global variables
 export CI=true
 export RAILS_ENV=test

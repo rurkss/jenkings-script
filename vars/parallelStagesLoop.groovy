@@ -66,28 +66,28 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         '''
                                     }
                                 }
-                                stage("JS Yarn Check") {
-                                    sh '''        
-                                        sleep 3600
-                                    '''                                            
-                                }
-                                
                                 // stage("JS Yarn Check") {
                                 //     sh '''        
-                                //         cd /home/app/src/components/accounting && [ -z $CI ] && yarn check --integrity 2> /dev/null || yarn install                                                
+                                //         sleep 3600
                                 //     '''                                            
                                 // }
-                                // stage("JS Lint") {                                            
-                                //     sh '''        
-                                //         cd /home/app/src/components/accounting && set -e && yarn lint
-                                //         [ ! -f .flowconfig ] || yarn flow check 
-                                //     '''
-                                // }
-                                // stage("JS Test") {
-                                //     sh '''        
-                                //         cd /home/app/src/components/accounting && yarn test
-                                //     '''
-                                // }
+                                
+                                stage("JS Yarn Check") {
+                                    sh '''        
+                                        cd /home/app/src/components/accounting && [ -z $CI ] && yarn check --integrity 2> /dev/null || yarn install                                                
+                                    '''                                            
+                                }
+                                stage("JS Lint") {                                            
+                                    sh '''        
+                                        cd /home/app/src/components/accounting && set -e && yarn lint
+                                        [ ! -f .flowconfig ] || yarn flow check 
+                                    '''
+                                }
+                                stage("JS Test") {
+                                    sh '''        
+                                        cd /home/app/src/components/accounting && yarn test
+                                    '''
+                                }
                                 
                             }
                         }

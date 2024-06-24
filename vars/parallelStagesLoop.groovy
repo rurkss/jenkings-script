@@ -15,10 +15,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         containers: multyContainerTemplate(webImage),                                          
                     ) {
                         node("nested-agent-${componentName}") {
-                            stage('Give Permissions') {
-                                steps {
-                                    sh "chmod 777 -R ${env.WORKSPACE}"                                    
-                                }
+                            stage('Give Permissions') {                                
+                                sh "chmod 777 -R ${env.WORKSPACE}"                                                                    
                             }
                             container('web') {
                                 stage("Setup Permissions") {

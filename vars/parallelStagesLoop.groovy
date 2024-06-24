@@ -18,8 +18,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             stage('Give Permissions') {                                
                                 sh "chmod 777 -R ${env.WORKSPACE}"     
                                 sh '''   
-                                    mkdir -p /home/jenkins/agent/test-job-2@tmp 
-                                    chmod 777 -R /home/jenkins/agent/test-job-2@tmp
+                                    mkdir -p /home/jenkins/agent/workspace/test-job-2@tmp 
+                                    chmod 777 -R /home/jenkins/agent/workspace/test-job-2@tmp
                                     echo "Current User and Groups:"
                                     id
                                 '''                                

@@ -16,7 +16,14 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                     ) {
                         node("nested-agent-${componentName}") {
                             stage('Give Permissions') {                                
-                                sh "chmod 777 -R ${env.WORKSPACE}"                                                                    
+                                sh "chmod 777 -R ${env.WORKSPACE}"     
+                                sh '''   
+                                    mkdir -p /home/jenkins/agent/test-job-2@tmp 
+                                    chmod 777 -R /home/jenkins/agent/test-job-2@tmp
+                                    echo "Current User and Groups:"
+                                    id
+                                '''                                
+
                             }
                             container('web') {
                                 stage("Setup Permissions") {

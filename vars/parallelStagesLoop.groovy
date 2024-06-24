@@ -42,7 +42,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         'JsDeps': {
                                             // unstash 'jsdeps'
                                             sh '''        
-                                                wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/7i3c35qq8881ikdm75qzw/jsdeps.tar.gz?rlkey=xfg8jtssr64puoecbi0itdzyh&st=ecnugmcl" --no-check-certificate  
+                                                wget -O jsdeps.tar.gz 
+                                                "https://dl.dropboxusercontent.com/scl/fi/4jfv1f1asfvp2qld4ez4c/jsdeps2.tar.gz?rlkey=3r58xp81zjm48jgw8ndiqvsya&st=kvogr9dx" --no-check-certificate                                                  
                                                 echo "Files after downloading:"
                                                 ls -l
                                                 pwd

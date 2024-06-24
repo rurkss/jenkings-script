@@ -76,6 +76,34 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                     '''
                                 }
                                 
+                                stage("Ruby Bundle and Tests") {
+                                    sh '''
+                                        cd /home/app/src/components/accounting && \
+                                        [ -n "$CI" ] && export BUNDLE_FROZEN=false && \
+                                        bundle check || bundle install && \
+                                        bundle lock --add-platform arm64-darwin-22 \
+                                                                arm64-darwin-23 \
+                                                                ruby \
+                                                                x86_64-darwin-22 \
+                                                                x86_64-darwin-23 \
+                                                                x86_64-linux && \
+                                        if [ -f bin/schema ]; then
+                                            bin/schema
+                                        else
+                                            [ ! -f spec/dummy/db/name ] || RAILS_ENV=test DISABLE_DATABASE_ENVIRONMENT_CHECK=true bin/rake app:db:drop app:db:prepare app:db:migrate
+                                        fi && \
+                                        OUTPUT="$(bin/yard)" && \
+                                        echo "${OUTPUT}" && \
+                                        if [ "$(echo ${OUTPUT} | grep warn | wc -l)" -gt 0 ]; then
+                                            echo "Documentation warnings occurred"
+                                            exit 1
+                                        fi && \
+                                        bin/rubocop --display-cop-names --extra-details --display-style-guide --config .rubocop.yml && \
+                                        echo "Time now is $(date -Iseconds)" && \
+                                        bin/rspec --format progress --format html --out ./tmp/spec_results/index.html spec
+                                    '''
+                                }
+                                
                             }
                         }
                     }

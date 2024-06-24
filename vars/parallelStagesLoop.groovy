@@ -15,23 +15,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         containers: multyContainerTemplate(webImage),                                          
                     ) {
                         node("nested-agent-${componentName}") {
-                            stage('Give Permissions') {                                
-                                sh "chmod 777 -R ${env.WORKSPACE}"     
-                                sh '''   
-                                    mkdir -p /home/jenkins/agent/workspace/test-job-2@tmp 
-                                    chmod 777 -R /home/jenkins/agent/workspace/test-job-2@tmp
-                                    echo "Current User and Groups:"
-                                    id
-                                '''                                
-
-                            }
                             container('web') {
-                                stage("Setup Permissions") {
-                                    sh '''
-                                        echo "Current User and Groups:"
-                                        id
-                                    '''
-                                }
                                 stage("Unstashing Files") {
                                     parallel(
                                         'Config.yml': {
@@ -73,27 +57,32 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         writeFile file: 'extract_artifacts.sh', text: scriptContent
                                         sh '''
                                             ls -all
-                                            ls -l /home/app/src/components/sales
+                                            ls -l /home/app/src/components/accounting
                                             sh extract_artifacts.sh                                                
                                             echo "Current working directory after running the script:"
                                             pwd
-                                            ls -l /home/app/src/components/sales
+                                            ls -l /home/app/src/components/accounting
                                         '''
                                     }
+                                },
+                                
+                                stage("JS Yarn Check") {
+                                    sh '''        
+                                        cd /home/app/src/components/accounting && [ -z $CI ] && yarn check --integrity 2> /dev/null || yarn install                                                
+                                    '''                                            
+                                },
+                                stage("JS Lint") {                                            
+                                    sh '''        
+                                        cd /home/app/src/components/accounting && set -e && yarn lint
+                                        [ ! -f .flowconfig ] || yarn flow check 
+                                    '''
+                                },
+                                stage("JS Test") {
+                                    sh '''        
+                                        cd /home/app/src/components/accounting && yarn test
+                                    '''
                                 }
-                                stage("Run Test ${componentName}") {
-                                    script{
-                                        def scriptContent = libraryResource 'scripts/run_test.sh'
-                                        writeFile file: 'run_test.sh', text: scriptContent
-                                        sh '''
-                                            mv run_test.sh /home/app/src
-                                            chmod +x /home/app/src/run_test.sh
-                                            cd /home/app/src
-                                            bash run_test.sh
-                                        '''
-                                    
-                                    }
-                                }
+                                
                             }
                         }
                     }

@@ -7,7 +7,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
         for (int taskIndex = 0; taskIndex < totalTasks; taskIndex++) {
             def componentName = testComponentNames[taskIndex]
             def label = "standalone-${componentName}"
-            parallelStages["Test ${componentName}"] = {   
+            parallelStages["Test ${componentName}-${taskIndex}"] = {   
                 semaphore.acquire() 
                 try {
                     podTemplate(

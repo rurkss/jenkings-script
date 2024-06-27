@@ -121,14 +121,14 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             }
                         }
                     }
-                } finally{
+                } finally {
                     semaphore.release()              
-                } catch(e) {
-                  echo e.toString()
-                  echo currentBuild.result
-                  currentBuild.result = "FAILURE"
-                  throw e
                 }
+            } catch (e) {
+                echo e.toString()
+                echo currentBuild.result
+                currentBuild.result = "FAILURE"
+                throw e
             }
         }
         parallel parallelStages

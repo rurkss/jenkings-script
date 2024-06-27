@@ -33,10 +33,10 @@ def call(String webImage) {
             ],
             resourceRequestMemory: '5Gi',
             resourceRequestCpu: '1500m',
-            resourceRequestEphemeralStorage: '5Gi',
+            resourceRequestEphemeralStorage: '10Gi',
             resourceLimitMemory: '5Gi',
             resourceLimitCpu: '1500m',
-            resourceLimitEphemeralStorage: '5Gi'
+            resourceLimitEphemeralStorage: '10Gi'
         ),
         containerTemplate(
             name: 'redis',

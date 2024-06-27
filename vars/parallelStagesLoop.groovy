@@ -122,8 +122,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         }
                     }
                 } finally {
-                    semaphore.release()              
-                }
+                    semaphore.release()
+                } 
             } catch (e) {
                 echo e.toString()
                 echo currentBuild.result

@@ -11,8 +11,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                     podTemplate(
                         cloud: "app-beta-px",
                         label: label,                        
-                        containers: multyContainerTemplate(env.WEB_IMG),
-                        // imagePullSecrets: ['image-registry-prod-robot-powerhome'],                                          
+                        containers: multyContainerTemplate(webImage),
+                        imagePullSecrets: ['image-registry-prod-robot-powerhome'],                                          
                     ) {
                         node(label) {
                             container('web') {

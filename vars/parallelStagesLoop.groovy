@@ -9,7 +9,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
             parallelStages["Test ${componentName}"] = {    
                 try {
                     podTemplate(
-                        cloud: "app-beta-px",
+                        cloud: getCloud(),
                         label: label,                        
                         containers: multyContainerTemplate(webImage),
                         imagePullSecrets: ['image-registry-prod-robot-powerhome'],                                          

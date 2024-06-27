@@ -32,10 +32,10 @@ def call(String webImage) {
                 envVar(key: 'HOME', value: '/home/app')
             ],
             resourceRequestMemory: '5Gi',
-            resourceRequestCpu: '1500m',
+            resourceRequestCpu: '2000m',
             resourceRequestEphemeralStorage: '10Gi',
             resourceLimitMemory: '5Gi',
-            resourceLimitCpu: '1500m',
+            resourceLimitCpu: '2000m',
             resourceLimitEphemeralStorage: '10Gi'
         ),
         containerTemplate(

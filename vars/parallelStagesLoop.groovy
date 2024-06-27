@@ -21,19 +21,19 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         'Config.yml': {
                                             unstash 'config-yml'
                                             sh '''  
-                                              mv config/config.yml /home/app/src/config/                                                
+                                              mv config.yml /home/app/src/config/                                                
                                             '''                                            
                                         },
                                         'Database.yml': {
                                             unstash 'database-yml'
                                             sh '''                                                        
-                                              mv config/database.yml /home/app/src/config/                                                
+                                              mv database.yml /home/app/src/config/                                                
                                             '''
                                         },
                                         'Ldap.yml': {
                                             unstash 'ldap-yml'
                                             sh '''                                                       
-                                              mv config/ldap.yml /home/app/src/config/                                                
+                                              mv ldap.yml /home/app/src/config/                                                
                                             '''
                                         },
                                          'JsDeps': {

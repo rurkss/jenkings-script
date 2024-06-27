@@ -89,7 +89,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                           bin/schema
                                       else
                                           echo "Schema does not exist"
-                                          [ ! -f spec/dummy/db/name ] || RAILS_ENV=test DISABLE_DATABASE_ENVIRONMENT_CHECK=true bin/rake app:db:prepare app:db:migrate
+                                          [ ! -f spec/dummy/db/name ] || RAILS_ENV=test DISABLE_DATABASE_ENVIRONMENT_CHECK=true bin/rake app:db:prepare
                                       fi && \
                                       end_time=\$(date +%s) && \
                                       echo "Step 3 (Schema/migration) took \$(expr \$end_time - \$start_time) seconds." && \

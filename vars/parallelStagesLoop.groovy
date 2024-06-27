@@ -1,114 +1,129 @@
 def call(def testComponentNames, String webImage, int maxParallelTasks) {
-    int totalTasks = testComponentNames.size()
-    def semaphore = new java.util.concurrent.Semaphore(maxParallelTasks)
+    int totalTasks = testComponentNames.size()    
 
     stage("Parallel Tasks") {
         def parallelStages = [:]
         for (int taskIndex = 0; taskIndex < totalTasks; taskIndex++) {
             def componentName = testComponentNames[taskIndex]
-            parallelStages["Test ${componentName}"] = {
-                semaphore.acquire()
+            def label = "standalone-${componentName}"
+            parallelStages["Test ${componentName}"] = {    
                 try {
                     podTemplate(
-                        cloud: getCloud(),
-                        label: "nested-agent-${componentName}",
-                        containers: multyContainerTemplate(webImage),                                          
+                        cloud: "app-beta-px",
+                        label: label,                        
+                        containers: multyContainerTemplate(env.WEB_IMG),
+                        imagePullSecrets: ['image-registry-prod-robot-powerhome'],                                          
                     ) {
-                        node("nested-agent-${componentName}") {
+                        node(label) {
                             container('web') {
                                 stage("Unstashing Files") {
                                     parallel(
                                         'Config.yml': {
                                             unstash 'config-yml'
-                                            sh '''        
-                                                mv config.yml /home/app/src/config/
-                                                ls -l /home/app/src/config/
+                                            sh '''  
+                                              mv config/config.yml /home/app/src/config/                                                
                                             '''                                            
                                         },
                                         'Database.yml': {
                                             unstash 'database-yml'
-                                            sh '''        
-                                                mv database.yml /home/app/src/config/
-                                                ls -l /home/app/src/config/
+                                            sh '''                                                        
+                                              mv config/database.yml /home/app/src/config/                                                
                                             '''
                                         },
                                         'Ldap.yml': {
                                             unstash 'ldap-yml'
-                                            sh '''        
-                                                mv ldap.yml /home/app/src/config/
-                                                ls -l /home/app/src/config/
+                                            sh '''                                                       
+                                              mv config/ldap.yml /home/app/src/config/                                                
                                             '''
                                         },
-                                        'JsDeps': {
+                                         'JsDeps': {
                                             // unstash 'jsdeps'
-                                            sh '''        
-                                                wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/4jfv1f1asfvp2qld4ez4c/jsdeps2.tar.gz?rlkey=3r58xp81zjm48jgw8ndiqvsya&st=kvogr9dx" --no-check-certificate                                                  
-                                                echo "Files after downloading:"
-                                                ls -l
-                                                pwd
-                                            '''
-                                            sh 'ls -l'
-                                        }
+                                            sh '''
+                                                wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/4jfv1f1asfvp2qld4ez4c/jsdeps2.tar.gz?rlkey=3r58xp81zjm48jgw8ndiqvsya&st=kvogr9dx" --no-check-certificate 
+                                                tar -xf jsdeps.tar.gz
+                                                mv node_modules /home/app/src/ &
+                                                for dir in components/*; do
+                                                  folder_name=$(basename "$dir")
+                                                  mv "$dir/node_modules" "/home/app/src/components/$folder_name/" &
+                                                done
+                                                wait
+                                                rm -rf jsdeps.tar.gz
+                                            '''                                          
+                                        },                                         
                                     )
-                                }  
-                                stage("Extracting/Copying Artifacts") {
-                                    script {
-                                        def scriptContent = libraryResource 'scripts/extract_artifacts.sh'
-                                        writeFile file: 'extract_artifacts.sh', text: scriptContent
-                                        sh '''
-                                            ls -all
-                                            ls -l /home/app/src/components/accounting
-                                            sh extract_artifacts.sh                                                
-                                            echo "Current working directory after running the script:"
-                                            pwd
-                                            ls -l /home/app/src/components/accounting
-                                        '''
-                                    }
                                 }
-                                
-                                stage("JS Yarn Check") {
-                                    sh '''
-                                        cd /home/app/src/components/accounting && \
+                                stage("JS Test") {
+                                    sh """
+                                        cd /home/app/src/components/${componentName} && \
                                         ([ -z $CI ] && yarn check --integrity 2> /dev/null || yarn install) && \
                                         set -e && yarn lint && \
                                         ([ ! -f .flowconfig ] || yarn flow check) && \
                                         yarn test
-                                    '''
+                                    """
                                 }
                                 
                                 stage("Ruby Bundle and Tests") {
-                                    sh '''
-                                        cd /home/app/src/components/accounting && \
-                                        [ -n "$CI" ] && export BUNDLE_FROZEN=false && \
-                                        bundle check || bundle install && \
-                                        bundle lock --add-platform arm64-darwin-22 \
-                                                                arm64-darwin-23 \
-                                                                ruby \
-                                                                x86_64-darwin-22 \
-                                                                x86_64-darwin-23 \
-                                                                x86_64-linux && \
-                                        if [ -f bin/schema ]; then
-                                            bin/schema
-                                        else
-                                            [ ! -f spec/dummy/db/name ] || RAILS_ENV=test DISABLE_DATABASE_ENVIRONMENT_CHECK=true bin/rake app:db:drop app:db:prepare app:db:migrate
-                                        fi && \
-                                        OUTPUT="$(bin/yard)" && \
-                                        echo "${OUTPUT}" && \
-                                        if [ "$(echo ${OUTPUT} | grep warn | wc -l)" -gt 0 ]; then
-                                            echo "Documentation warnings occurred"
-                                            exit 1
-                                        fi && \
-                                        bin/rubocop --display-cop-names --extra-details --display-style-guide --config .rubocop.yml && \
-                                        echo "Time now is $(date -Iseconds)" && \
-                                        bin/rspec --format progress --format html --out ./tmp/spec_results/index.html spec
-                                    '''
-                                }
-                                
+                                  sh """
+                                      cd /home/app/src/components/${componentName} && \
+                                      
+                                      start_time=\$(date +%s) && \
+                                      [ -n "\$CI" ] && export BUNDLE_FROZEN=false && \
+                                      bundle check || bundle install && \
+                                      end_time=\$(date +%s) && \
+                                      echo "Step 1 (Bundle check/install) took \$(expr \$end_time - \$start_time) seconds." && \
+                                      
+                                      start_time=\$(date +%s) && \
+                                      bundle lock --add-platform arm64-darwin-22 \
+                                                              arm64-darwin-23 \
+                                                              ruby \
+                                                              x86_64-darwin-22 \
+                                                              x86_64-darwin-23 \
+                                                              x86_64-linux && \
+                                      end_time=\$(date +%s) && \
+                                      echo "Step 2 (Bundle lock) took \$(expr \$end_time - \$start_time) seconds." && \
+                                      
+                                      start_time=\$(date +%s) && \
+                                      ls -all && \
+                                      if [ -f bin/schema ]; then
+                                          echo "Schema exists"
+                                          bin/schema
+                                      else
+                                          echo "Schema does not exist"
+                                          [ ! -f spec/dummy/db/name ] || RAILS_ENV=test DISABLE_DATABASE_ENVIRONMENT_CHECK=true bin/rake app:db:prepare app:db:migrate
+                                      fi && \
+                                      end_time=\$(date +%s) && \
+                                      echo "Step 3 (Schema/migration) took \$(expr \$end_time - \$start_time) seconds." && \
+                                      
+                                      start_time=\$(date +%s) && \
+                                      OUTPUT="\$(bin/yard)" && \
+                                      echo "\${OUTPUT}" && \
+                                      if [ "\$(echo \${OUTPUT} | grep warn | wc -l)" -gt 0 ]; then
+                                          echo "Documentation warnings occurred"
+                                          exit 1
+                                      fi && \
+                                      end_time=\$(date +%s) && \
+                                      echo "Step 4 (Yard) took \$(expr \$end_time - \$start_time) seconds." && \
+                                      
+                                      start_time=\$(date +%s) && \
+                                      bin/rubocop --display-cop-names --extra-details --display-style-guide --config .rubocop.yml && \
+                                      end_time=\$(date +%s) && \
+                                      echo "Step 5 (Rubocop) took \$(expr \$end_time - \$start_time) seconds." && \
+                                      
+                                      start_time=\$(date +%s) && \
+                                      echo "Time now is \$(date -Iseconds)" && \
+                                      bin/rspec --format progress --format html --out ./tmp/spec_results/index.html spec && \
+                                      end_time=\$(date +%s) && \
+                                      echo "Step 6 (RSpec) took \$(expr \$end_time - \$start_time) seconds."
+                                  """
+                              }  
                             }
                         }
                     }
-                } finally {
-                    semaphore.release()
+                } catch(e) {
+                  echo e.toString()
+                  echo currentBuild.result
+                  currentBuild.result = "FAILURE"
+                  throw e
                 }
             }
         }

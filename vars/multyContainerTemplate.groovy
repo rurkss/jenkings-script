@@ -1,5 +1,5 @@
 def call(String webImage) {
-    return [
+     return [
         containerTemplate(
             name: 'web',
             image: webImage, 
@@ -12,6 +12,7 @@ def call(String webImage) {
                 envVar(key: 'DATABASE_GIS_NAME', value: 'power_gis'),
                 envVar(key: 'DATABASE_PASS', value: 'talkbox'),
                 envVar(key: 'DATABASE_HOST', value: '127.0.0.1'),
+                envVar(key: 'REDIS_HOST', value: '127.0.0.1'),
                 envVar(key: 'CI', value: 'true'),
                 envVar(key: 'RAILS_ENV', value: 'test'),
                 envVar(key: 'REDIS_LOGICAL_DB_NAME', value: '0'),
@@ -30,31 +31,29 @@ def call(String webImage) {
                 envVar(key: 'NODE_BIN', value: '/home/app/.nvm/versions/node/v20.14.0/bin'),
                 envVar(key: 'HOME', value: '/home/app')
             ],
-            // runAsUser: '1000',
-            // runAsGroup: '9999',
             resourceRequestMemory: '5Gi',
-            resourceRequestCpu: '3000m',
+            resourceRequestCpu: '2000m',
             resourceRequestEphemeralStorage: '10Gi',
             resourceLimitMemory: '5Gi',
-            resourceLimitCpu: '3000m',
+            resourceLimitCpu: '2000m',
             resourceLimitEphemeralStorage: '10Gi'
         ),
         containerTemplate(
             name: 'redis',
             image: 'redis:7.2.5-alpine',
             envVars: [envVar(key: 'ALLOW_EMPTY_PASSWORD', value: 'true')],
-            resourceRequestMemory: '256Mi',
+            resourceRequestMemory: '200Mi',
             resourceRequestCpu: '50m',
-            resourceLimitMemory: '512Mi',
-            resourceLimitCpu: '100m'
+            resourceLimitMemory: '200Mi',
+            resourceLimitCpu: '50m'
         ),
         containerTemplate(
             name: 'db',
             image: 'mysql:8.0.32',
             envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
-            resourceRequestMemory: '2Gi',
+            resourceRequestMemory: '4Gi',
             resourceRequestCpu: '500m',
-            resourceLimitMemory: '2Gi',
+            resourceLimitMemory: '4Gi',
             resourceLimitCpu: '500m'
         ),
         containerTemplate(
@@ -71,10 +70,10 @@ def call(String webImage) {
                 envVar(key: 'DB_DUMP_ACCESS_KEY', value: 'WITYe4fhZNGtnOrC5azcDByaZKtJw+hFKIBJU6pO')
             ],
             resourceRequestMemory: '2Gi',
-            resourceRequestCpu: '500m',
+            resourceRequestCpu: '100m',
             resourceRequestEphemeralStorage: '2Gi',
             resourceLimitMemory: '2Gi',
-            resourceLimitCpu: '500m',
+            resourceLimitCpu: '100m',
             resourceLimitEphemeralStorage: '2Gi'
         )
     ]

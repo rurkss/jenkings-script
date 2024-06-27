@@ -1,12 +1,14 @@
 def call(def testComponentNames, String webImage, int maxParallelTasks) {
     int totalTasks = testComponentNames.size()    
+    def semaphore = new java.util.concurrent.Semaphore(maxParallelTasks)
 
     stage("Parallel Tasks") {
         def parallelStages = [:]
         for (int taskIndex = 0; taskIndex < totalTasks; taskIndex++) {
             def componentName = testComponentNames[taskIndex]
             def label = "standalone-${componentName}"
-            parallelStages["Test ${componentName}"] = {    
+            parallelStages["Test ${componentName}"] = {   
+                semaphore.acquire() 
                 try {
                     podTemplate(
                         cloud: getCloud(),
@@ -119,6 +121,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             }
                         }
                     }
+                } finally{
+                    semaphore.release()              
                 } catch(e) {
                   echo e.toString()
                   echo currentBuild.result

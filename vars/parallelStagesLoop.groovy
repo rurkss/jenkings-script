@@ -12,7 +12,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         cloud: "app-beta-px",
                         label: label,                        
                         containers: multyContainerTemplate(env.WEB_IMG),
-                        imagePullSecrets: ['image-registry-prod-robot-powerhome'],                                          
+                        // imagePullSecrets: ['image-registry-prod-robot-powerhome'],                                          
                     ) {
                         node(label) {
                             container('web') {

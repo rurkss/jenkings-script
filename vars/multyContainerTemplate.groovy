@@ -31,7 +31,7 @@ def call(String webImage) {
                 envVar(key: 'NODE_BIN', value: '/home/app/.nvm/versions/node/v20.14.0/bin'),
                 envVar(key: 'HOME', value: '/home/app')
             ],
-            resourceRequestMemory: '5Gi',
+            resourceRequestMemory: '1Gi',
             resourceRequestCpu: '1000m',
             resourceRequestEphemeralStorage: '10Gi',
             resourceLimitMemory: '5Gi',
@@ -51,9 +51,9 @@ def call(String webImage) {
             name: 'db',
             image: 'mysql:8.0.32',
             envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
-            resourceRequestMemory: '4Gi',
+            resourceRequestMemory: '1Gi',
             resourceRequestCpu: '1000m',
-            resourceLimitMemory: '4Gi',
+            resourceLimitMemory: '1Gi',
             resourceLimitCpu: '1000m'
         ),
         containerTemplate(
@@ -69,10 +69,10 @@ def call(String webImage) {
                 envVar(key: 'DB_DUMP_KEY_ID', value: 'KECA4ZKKBSCGP8OUVJO8'),
                 envVar(key: 'DB_DUMP_ACCESS_KEY', value: 'WITYe4fhZNGtnOrC5azcDByaZKtJw+hFKIBJU6pO')
             ],
-            resourceRequestMemory: '2Gi',
+            resourceRequestMemory: '512Mi',
             resourceRequestCpu: '100m',
             resourceRequestEphemeralStorage: '2Gi',
-            resourceLimitMemory: '2Gi',
+            resourceLimitMemory: '1Gi',
             resourceLimitCpu: '100m',
             resourceLimitEphemeralStorage: '2Gi'
         )

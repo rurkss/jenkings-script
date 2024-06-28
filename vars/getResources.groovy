@@ -4,7 +4,7 @@ def call() {
             memory: '1Gi'
         ],
         requests: [
-            cpu: '500m',
+            cpu: '100m',
             memory: '500Mi'
         ]
     ]

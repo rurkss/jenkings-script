@@ -31,10 +31,10 @@ def call(String webImage) {
                 envVar(key: 'NODE_BIN', value: '/home/app/.nvm/versions/node/v20.14.0/bin'),
                 envVar(key: 'HOME', value: '/home/app')
             ],
-            resourceRequestMemory: '2Gi',
+            resourceRequestMemory: '3Gi',
             resourceRequestCpu: '1000m',
             resourceRequestEphemeralStorage: '10Gi',
-            resourceLimitMemory: '2Gi',
+            resourceLimitMemory: '3Gi',
             resourceLimitCpu: '1000m',
             resourceLimitEphemeralStorage: '10Gi'
         ),

@@ -34,7 +34,7 @@ def call(String webImage) {
             resourceRequestMemory: '1Gi',
             resourceRequestCpu: '1000m',
             resourceRequestEphemeralStorage: '10Gi',
-            resourceLimitMemory: '5Gi',
+            resourceLimitMemory: '1Gi',
             resourceLimitCpu: '1000m',
             resourceLimitEphemeralStorage: '10Gi'
         ),
@@ -72,7 +72,7 @@ def call(String webImage) {
             resourceRequestMemory: '512Mi',
             resourceRequestCpu: '100m',
             resourceRequestEphemeralStorage: '2Gi',
-            resourceLimitMemory: '1Gi',
+            resourceLimitMemory: '512Mi',
             resourceLimitCpu: '100m',
             resourceLimitEphemeralStorage: '2Gi'
         )

@@ -113,7 +113,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                       
                                       start_time=\$(date +%s) && \
                                       echo "Time now is \$(date -Iseconds)" && \
-                                      bin/rspec --format progress --format html --out ./tmp/spec_results/index.html spec && \
+                                      bin/rspec spec && \
                                       end_time=\$(date +%s) && \
                                       echo "Step 6 (RSpec) took \$(expr \$end_time - \$start_time) seconds."
                                   """

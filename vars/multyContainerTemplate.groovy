@@ -56,5 +56,25 @@ def call(String webImage) {
             resourceLimitMemory: '10Gi',
             resourceLimitCpu: '1000m'
         ),
+        containerTemplate(
+            name: 'geocoder',
+            image: 'image-registry.powerapp.cloud/power-gis/power-gis:main',
+            envVars: [
+                envVar(key: 'SKIP_DATA_LOADING', value: 'true'),
+                envVar(key: 'POSTGRES_USER', value: 'postgres'),
+                envVar(key: 'POSTGRES_PASSWORD', value: 'password'),
+                envVar(key: 'POSTGRES_DB', value: 'power_gis'),
+                envVar(key: 'NITRO_USER', value: 'nitro'),
+                envVar(key: 'NITRO_PASSWORD', value: 'password'),
+                envVar(key: 'DB_DUMP_KEY_ID', value: 'KECA4ZKKBSCGP8OUVJO8'),
+                envVar(key: 'DB_DUMP_ACCESS_KEY', value: 'WITYe4fhZNGtnOrC5azcDByaZKtJw+hFKIBJU6pO')
+            ],
+            resourceRequestMemory: '512Mi',
+            resourceRequestCpu: '1000m',
+            resourceRequestEphemeralStorage: '2Gi',
+            resourceLimitMemory: '512Mi',
+            resourceLimitCpu: '1000m',
+            resourceLimitEphemeralStorage: '2Gi'
+        )
     ]
 }

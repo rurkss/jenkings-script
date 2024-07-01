@@ -51,9 +51,9 @@ def call(String webImage) {
             name: 'db',
             image: 'mysql:8.0.32',
             envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
-            resourceRequestMemory: '1Gi',
+            resourceRequestMemory: '10Gi',
             resourceRequestCpu: '1000m',
-            resourceLimitMemory: '1Gi',
+            resourceLimitMemory: '10Gi',
             resourceLimitCpu: '1000m'
         ),
         containerTemplate(

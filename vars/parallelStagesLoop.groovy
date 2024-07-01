@@ -16,7 +16,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         containers: multyContainerTemplate(webImage),
                         imagePullSecrets: ['image-registry-prod-robot-powerhome'],
                         volumes: [
-                            dynamicPVC(mountPath: '/var/lib/mysql', size: '5Gi', storageClassName: 'staging-performance')
+                            dynamicPVC(mountPath: '/var/lib/mysql', size: '5Gi', storageClassName: 'staging-performance'),
+                            configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config'),
                         ]                          
                     ) {
                         node(label) {

@@ -17,7 +17,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         imagePullSecrets: ['image-registry-prod-robot-powerhome'],
                         volumes: [
                             dynamicPVC(mountPath: '/var/lib/mysql', size: '5Gi', storageClassName: 'staging-performance'),
-                            configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config')
+                            configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config'),
+                            dynamicPVC(mountPath: '/var/lib/postgresql/data', size: '5Gi', storageClassName: 'staging-performance'),
                         ]                          
                     ) {
                         node(label) {

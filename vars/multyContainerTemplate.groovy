@@ -49,7 +49,7 @@ def call(String webImage) {
         ),
         containerTemplate(
             name: 'db',
-            image: 'rurkss/my-custom-mysql:8.0.32',
+            image: 'rurkss/my-custom-mysql:8.0.32.1',
             envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
             resourceRequestMemory: '10Gi',
             resourceRequestCpu: '1000m',

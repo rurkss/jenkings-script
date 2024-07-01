@@ -70,10 +70,10 @@ def call(String webImage) {
                 envVar(key: 'DB_DUMP_ACCESS_KEY', value: 'WITYe4fhZNGtnOrC5azcDByaZKtJw+hFKIBJU6pO')
             ],
             resourceRequestMemory: '512Mi',
-            resourceRequestCpu: '1000m',
+            resourceRequestCpu: '100m',
             resourceRequestEphemeralStorage: '2Gi',
             resourceLimitMemory: '512Mi',
-            resourceLimitCpu: '1000m',
+            resourceLimitCpu: '100m',
             resourceLimitEphemeralStorage: '2Gi'
         )
     ]

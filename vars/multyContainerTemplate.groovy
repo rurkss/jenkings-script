@@ -52,9 +52,9 @@ def call(String webImage) {
             image: 'mysql:8.0.32',
             envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
             resourceRequestMemory: '1Gi',
-            resourceRequestCpu: '500m',
+            resourceRequestCpu: '1000m',
             resourceLimitMemory: '1Gi',
-            resourceLimitCpu: '500m'
+            resourceLimitCpu: '1000m'
         ),
         containerTemplate(
             name: 'geocoder',

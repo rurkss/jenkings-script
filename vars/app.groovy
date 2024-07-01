@@ -1,5 +1,5 @@
 def call() {
-    def testComponentNames = ["sales", "sales", "sales"]
+    def testComponentNames = ["sales"]
     String webImage = 'image-registry.powerapp.cloud/nitro-web/nitro_web:PR-40151-1b6d0a2402609c9a11f94c925e8f077e1b8fd47f-62'
     int maxParallelTasks = 3
     String yamlFilePath = 'multicontainer.yaml'

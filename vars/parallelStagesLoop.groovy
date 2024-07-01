@@ -14,7 +14,10 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         cloud: getCloud(),
                         label: label,                        
                         containers: multyContainerTemplate(webImage),
-                        imagePullSecrets: ['image-registry-prod-robot-powerhome'],                                          
+                        imagePullSecrets: ['image-registry-prod-robot-powerhome'],
+                        volumes: [
+                            dynamicPVC(mountPath: '/var/lib/mysql', size: '5Gi', volumeName: 'staging-performance')
+                        ]                          
                     ) {
                         node(label) {
                             container('web') {

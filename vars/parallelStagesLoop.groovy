@@ -18,8 +18,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         volumes: [
                             dynamicPVC(mountPath: '/var/lib/mysql', size: '5Gi', storageClassName: 'staging-performance'),
                             configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config'),
-                            dynamicPVC(mountPath: '/var/lib/postgresql/data', size: '5Gi', storageClassName: 'staging-performance'),
-                            dynamicPVC(mountPath: '/home', size: '20Gi', storageClassName: 'staging-performance'),
+                            dynamicPVC(mountPath: '/var/lib/postgresql/data', size: '5Gi', storageClassName: 'staging-performance'),                            
                         ]                          
                     ) {
                         node(label) {

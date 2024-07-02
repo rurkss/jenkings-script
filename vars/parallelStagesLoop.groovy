@@ -118,6 +118,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                       echo "Time now is $(date -Iseconds)" && \
                                       for folder in spec/*; do \
                                         if [ -d "$folder" ]; then \
+                                            echo "Running RSpec for $folder" && \
                                             bin/rspec "$folder" & \
                                         fi \
                                       done && \

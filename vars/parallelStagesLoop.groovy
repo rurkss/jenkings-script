@@ -114,11 +114,16 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                       end_time=\$(date +%s) && \
                                       echo "Step 5 (Rubocop) took \$(expr \$end_time - \$start_time) seconds." && \
                                       
-                                      start_time=\$(date +%s) && \
-                                      echo "Time now is \$(date -Iseconds)" && \
-                                      bin/rspec spec && \
-                                      end_time=\$(date +%s) && \
-                                      echo "Step 6 (RSpec) took \$(expr \$end_time - \$start_time) seconds."
+                                      start_time=$(date +%s) && \
+                                      echo "Time now is $(date -Iseconds)" && \
+                                      for folder in spec/*; do \
+                                      if [ -d "$folder" ]; then \
+                                        bin/rspec "$folder" & \
+                                      fi \
+                                      done && \
+                                      wait && \
+                                      end_time=$(date +%s) && \
+                                      echo "Step 6 (RSpec) took $(expr $end_time - $start_time) seconds."
                                   """
                               }  
                             }

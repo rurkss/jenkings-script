@@ -32,10 +32,10 @@ def call(String webImage) {
                 envVar(key: 'HOME', value: '/home/app')
             ],
             resourceRequestMemory: '5Gi',
-            resourceRequestCpu: '1000m',
+            resourceRequestCpu: '1500m',
             resourceRequestEphemeralStorage: '10Gi',
             resourceLimitMemory: '5Gi',
-            resourceLimitCpu: '1000m',
+            resourceLimitCpu: '1500m',
             resourceLimitEphemeralStorage: '10Gi'
         ),
         containerTemplate(
@@ -52,9 +52,9 @@ def call(String webImage) {
             image: 'mysql:8.0.32',
             envVars: [envVar(key: 'MYSQL_ROOT_PASSWORD', value: 'talkbox')],
             resourceRequestMemory: '10Gi',
-            resourceRequestCpu: '1000m',
+            resourceRequestCpu: '500m',
             resourceLimitMemory: '10Gi',
-            resourceLimitCpu: '1000m'
+            resourceLimitCpu: '500m'
         ),
         containerTemplate(
             name: 'geocoder',

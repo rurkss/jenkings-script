@@ -1,4 +1,4 @@
 def call() {
-    return 'app-beta-hq'
+    return 'app-beta'
     //return 'kubernetes'
 }

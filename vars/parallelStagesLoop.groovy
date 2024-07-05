@@ -16,7 +16,10 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                         containers: multyContainerTemplate(webImage),
                         imagePullSecrets: ['image-registry-prod-robot-powerhome'],
                         volumes: [
-                            configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config')                         
+                            configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config'),
+                            emptyDirVolume(mountPath: '/var/lib/mysql', memory: true),  
+                            emptyDirVolume(mountPath: '/home/app/.local', memory: true),  
+                            emptyDirVolume(mountPath: '/home/app/bundle', memory: true),                         
                         ]                          
                     ) {
                         node(label) {

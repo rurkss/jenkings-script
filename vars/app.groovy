@@ -42,8 +42,12 @@ def call() {
                     }
                 )
             }
+
+            stage('Run Tests') {
+                parallelStagesLoop(testComponentNames, webImage, maxParallelTasks)
+            }
         }
     }
 
-    parallelStagesLoop(testComponentNames, webImage, maxParallelTasks)
+    // parallelStagesLoop(testComponentNames, webImage, maxParallelTasks)
 }

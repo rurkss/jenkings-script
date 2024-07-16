@@ -29,7 +29,7 @@ def call() {
                 }
             }
             stage('Create PVC'){
-                withKubeConfig {
+                withKubeConfig([namespace: "this-other-namespace"]) {
                     sh 'kubectl get configmap'
                 }
             }

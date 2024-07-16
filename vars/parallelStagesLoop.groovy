@@ -21,7 +21,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config'),
                             emptyDirVolume(mountPath: '/var/lib/mysql', memory: true),  
                             emptyDirVolume(mountPath: '/home/app/.local', memory: true),  
-                            emptyDirVolume(mountPath: '/home/app/bundle', memory: true),                 
+                            emptyDirVolume(mountPath: '/home/app/bundle', memory: true),                               
                         ]                          
                     ) {
                         node(label) {

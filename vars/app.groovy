@@ -10,7 +10,7 @@ def call() {
         containers: [
             containerTemplate(
                 name: 'busybox',
-                image: 'busybox',
+                image: 'bitnami/kubectl:latest',
                 command: 'cat',
                 ttyEnabled: true,
                 resourceRequestMemory: getResources().requests.memory,
@@ -29,7 +29,7 @@ def call() {
                 }
             }
             stage('Create PVC'){
-                withKubeConfig([namespace: "this-other-namespace"]) {
+                withKubeConfig {
                     sh 'kubectl get configmap'
                 }
             }

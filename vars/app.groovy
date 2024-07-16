@@ -28,6 +28,11 @@ def call() {
                     stash includes: "${outputFile}", name: "${stashName}"
                 }
             }
+            stage('Create PVC'){
+                withKubeConfig {
+                    sh 'kubectl get configmap'
+                }
+            }
 
             stage('Download and Stash YAMLs') {
                 parallel (

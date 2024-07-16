@@ -11,6 +11,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                 semaphore.acquire() 
                 try {
                     podTemplate(
+                        inheritFrom: '',
                         cloud: getCloud(),
                         label: label,                        
                         containers: multyContainerTemplate(webImage),

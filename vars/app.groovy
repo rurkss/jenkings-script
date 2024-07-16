@@ -17,20 +17,18 @@ def call() {
                 resourceRequestCpu: getResources().requests.cpu,
                 resourceLimitMemory: getResources().limits.memory,
                 resourceRequestEphemeralStorage: '512Mi',
-                resourceLimitEphemeralStorage: '512Mi'
+                resourceLimitEphemeralStorage: '512Mi',
+                volumes: [
+                    dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'staging-performance'),
+                ]
             )
         ]
     ) {
         node('busybox-agent') {
             def downloadAndStash = { String url, String outputFile, String stashName ->
                 container('busybox') {
-                    sh "wget -O ${outputFile} \"${url}\" --no-check-certificate"
-                    stash includes: "${outputFile}", name: "${stashName}"
-                }
-            }
-            stage('Create PVC'){
-                withKubeConfig {
-                    sh 'kubectl get configmap'
+                    sh "wget -O /home/config/${outputFile} \"${url}\" --no-check-certificate"
+                    // stash includes: "${outputFile}", name: "${stashName}"
                 }
             }
 

@@ -10,18 +10,18 @@ def call() {
         containers: [
             containerTemplate(
                 name: 'busybox',
-                image: 'bitnami/kubectl:latest',
+                image: 'busybox:latest',
                 command: 'cat',
                 ttyEnabled: true,
                 resourceRequestMemory: getResources().requests.memory,
                 resourceRequestCpu: getResources().requests.cpu,
                 resourceLimitMemory: getResources().limits.memory,
                 resourceRequestEphemeralStorage: '512Mi',
-                resourceLimitEphemeralStorage: '512Mi',
-                volumes: [
-                    dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'staging-performance'),
-                ]
+                resourceLimitEphemeralStorage: '512Mi'                
             )
+        ],
+        volumes: [
+            dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'staging-performance'),
         ]
     ) {
         node('busybox-agent') {

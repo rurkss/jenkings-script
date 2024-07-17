@@ -10,7 +10,7 @@ def call() {
         containers: [
             containerTemplate(
                 name: 'busybox',
-                image: 'busybox:latest',
+                image: 'd3fk/kubectl:v1.29',
                 command: 'cat',
                 ttyEnabled: true,
                 resourceRequestMemory: getResources().requests.memory,
@@ -22,12 +22,7 @@ def call() {
         ],
         imagePullSecrets: ['image-registry-prod-robot-powerhome'],
         volumes: [
-            // dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'file', accessModes: 'ReadWriteMany'),
-            persistentVolumeClaim(
-                mountPath: '/home/config',
-                claimName: 'jenkins-pvc-customer',
-                readOnly: false
-            ),
+            dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'file', accessModes: 'ReadWriteMany'),
         ]
     ) {
         node('busybox-agent') {
@@ -50,6 +45,12 @@ def call() {
                         downloadAndStash("https://dl.dropboxusercontent.com/scl/fi/7368hynz2bz75cl13zqlm/database.yml?rlkey=1z4jm6qjvy95jrb11nmhxczlo&st=ry5b6cbq", 'database.yml', 'database-yml')                                                                        
                     }
                 )
+            }
+
+            stage('Get PVC'){
+                withKubeConfig([namespace: "this-other-namespace"]) {
+                    sh 'kubectl get pvc'
+                }
             }
 
             stage('Run Tests') {

@@ -22,7 +22,7 @@ def call() {
             containerTemplate(
                 name: 'kubectl',
                 command: '/bin/cat',
-                image: 'rurkss/kubectl:v1.1',
+                image: 'rurkss/kubectl:v1.2',
                 ttyEnabled: true,
                 resourceRequestMemory: "100Mi",
                 resourceRequestCpu: "50m",

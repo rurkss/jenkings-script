@@ -60,7 +60,7 @@ def call() {
 
             stage('Get PVC'){
                 container('kubectl') {
-                    withKubeConfig {
+                    withKubeConfig(credentialsId: 'hq-06-17') {
                         sh 'kubectl get pvc'
                     }
                 }

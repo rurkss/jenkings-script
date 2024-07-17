@@ -21,7 +21,7 @@ def call() {
             ),
             containerTemplate(
                 name: 'kubectl',
-                command: "sleep 3600",
+                command: "wile true; do sleep 3600; done",
                 image: 'd3fk/kubectl:v1.29',
                 ttyEnabled: true,
                 resourceRequestMemory: "100Mi",

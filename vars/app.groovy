@@ -22,7 +22,12 @@ def call() {
         ],
         imagePullSecrets: ['image-registry-prod-robot-powerhome'],
         volumes: [
-            dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'file', accessModes: 'ReadWriteMany'),
+            // dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'file', accessModes: 'ReadWriteMany'),
+            persistentVolumeClaim(
+                mountPath: '/home/config',
+                claimName: 'jenkins-pvc-customer',
+                readOnly: false
+            ),
         ]
     ) {
         node('busybox-agent') {

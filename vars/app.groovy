@@ -19,27 +19,17 @@ def call() {
                 resourceRequestEphemeralStorage: '512Mi',
                 resourceLimitEphemeralStorage: '512Mi',                
             ),
-            yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    app: kubectl-pod
-spec:
-  containers:
-  - name: kubectl
-    image: d3fk/kubectl:v1.29
-    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
-    tty: true
-    resources:
-      requests:
-        memory: "100Mi"
-        cpu: "50m"
-        ephemeral-storage: "50Mi"
-      limits:
-        memory: "100Mi"
-        ephemeral-storage: "50Mi"
-"""
+            containerTemplate(
+                name: 'kubectl',
+                command: '/bin/sh -c "while true; do sleep 3600; done"',
+                image: 'd3fk/kubectl:v1.29',
+                ttyEnabled: true,
+                resourceRequestMemory: "100Mi",
+                resourceRequestCpu: "50m",
+                resourceLimitMemory: "100Mi",
+                resourceRequestEphemeralStorage: '50Mi',
+                resourceLimitEphemeralStorage: '50Mi',                
+            )
         ],
         imagePullSecrets: ['image-registry-prod-robot-powerhome'],
         volumes: [

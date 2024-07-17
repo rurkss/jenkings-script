@@ -51,20 +51,20 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                               cp /home/config/ldap.yml /home/app/src/config/                                                
                                             '''
                                         },
-                                         'JsDeps': {
-                                            // unstash 'jsdeps'
-                                            sh '''
-                                                wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/4jfv1f1asfvp2qld4ez4c/jsdeps2.tar.gz?rlkey=3r58xp81zjm48jgw8ndiqvsya&st=kvogr9dx" --no-check-certificate 
-                                                tar -xf jsdeps.tar.gz
-                                                mv node_modules /home/app/src/ &
-                                                for dir in components/*; do
-                                                  folder_name=$(basename "$dir")
-                                                  mv "$dir/node_modules" "/home/app/src/components/$folder_name/" &
-                                                done
-                                                wait
-                                                rm -rf jsdeps.tar.gz
-                                            '''                                          
-                                        },                                         
+                                        //  'JsDeps': {
+                                        //     // unstash 'jsdeps'
+                                        //     sh '''
+                                        //         wget -O jsdeps.tar.gz "https://dl.dropboxusercontent.com/scl/fi/4jfv1f1asfvp2qld4ez4c/jsdeps2.tar.gz?rlkey=3r58xp81zjm48jgw8ndiqvsya&st=kvogr9dx" --no-check-certificate 
+                                        //         tar -xf jsdeps.tar.gz
+                                        //         mv node_modules /home/app/src/ &
+                                        //         for dir in components/*; do
+                                        //           folder_name=$(basename "$dir")
+                                        //           mv "$dir/node_modules" "/home/app/src/components/$folder_name/" &
+                                        //         done
+                                        //         wait
+                                        //         rm -rf jsdeps.tar.gz
+                                        //     '''                                          
+                                        // },                                         
                                     )
                                 }
                                 stage("JS Test") {

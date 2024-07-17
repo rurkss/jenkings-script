@@ -13,6 +13,7 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                     podTemplate(
                         label: label,                        
                         containers: multyContainerTemplate(webImage),
+                        cloud: getCloud(),
                         volumes: [
                             configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config'),
                             emptyDirVolume(mountPath: '/var/lib/mysql', memory: true),  

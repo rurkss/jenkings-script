@@ -9,7 +9,7 @@ def call() {
         label: 'busybox-agent',
         containers: [
             containerTemplate(
-                name: 'web',
+                name: 'busybox',
                 image: 'busybox:latest',
                 command: 'cat',
                 ttyEnabled: true,
@@ -27,7 +27,7 @@ def call() {
     ) {
         node('busybox-agent') {
             def downloadAndStash = { String url, String outputFile, String stashName ->
-                container('web') {
+                container('busybox') {
                     sh "wget -O /home/config/${outputFile} \"${url}\" --no-check-certificate"
                     // stash includes: "${outputFile}", name: "${stashName}"
                 }

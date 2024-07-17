@@ -11,12 +11,8 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                 semaphore.acquire() 
                 try {
                     podTemplate(
-                        inheritFrom: 'bparent',
-                        cloud: getCloud(),
                         label: label,                        
                         containers: multyContainerTemplate(webImage),
-                        imagePullSecrets: ['image-registry-prod-robot-powerhome'],
-                        // nodeSelector: "diskperformanceranking=5",
                         volumes: [
                             configMapVolume(mountPath: '/etc/mysql/my.cnf', subPath: 'my.cnf', configMapName: 'mysql-config'),
                             emptyDirVolume(mountPath: '/var/lib/mysql', memory: true),  

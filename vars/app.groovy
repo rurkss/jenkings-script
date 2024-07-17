@@ -7,7 +7,7 @@ def call() {
     podTemplate(
         cloud: getCloud(),
         label: 'busybox-agent',
-        serviceaccount: 'jenkins-build',
+        serviceAccount: 'jenkins-build',
         containers: [
             containerTemplate(
                 name: 'busybox',
@@ -45,19 +45,19 @@ def call() {
                 }
             }
 
-            stage('Download and Stash YAMLs') {
-                parallel (
-                    'Config.yml': {
-                        downloadAndStash("https://dl.dropboxusercontent.com/scl/fi/svdpth34f16dfxuohb4ej/config.yml?rlkey=va8hqpr82wp2c5i5g56tc9vmx&st=pr7mhaoy", 'config.yml', 'config-yml')
-                    },
-                    'Ldap.yml': {
-                        downloadAndStash("https://dl.dropboxusercontent.com/scl/fi/v1pe0vri61j0mj0lctquu/ldap.yml?rlkey=nak1v3kqxoam6h4f3kjkbye7g&st=vnbvlqrz", 'ldap.yml', 'ldap-yml')                        
-                    },
-                    'Database.yml': {
-                        downloadAndStash("https://dl.dropboxusercontent.com/scl/fi/7368hynz2bz75cl13zqlm/database.yml?rlkey=1z4jm6qjvy95jrb11nmhxczlo&st=ry5b6cbq", 'database.yml', 'database-yml')                                                                        
-                    }
-                )
-            }
+            // stage('Download and Stash YAMLs') {
+            //     parallel (
+            //         'Config.yml': {
+            //             downloadAndStash("https://dl.dropboxusercontent.com/scl/fi/svdpth34f16dfxuohb4ej/config.yml?rlkey=va8hqpr82wp2c5i5g56tc9vmx&st=pr7mhaoy", 'config.yml', 'config-yml')
+            //         },
+            //         'Ldap.yml': {
+            //             downloadAndStash("https://dl.dropboxusercontent.com/scl/fi/v1pe0vri61j0mj0lctquu/ldap.yml?rlkey=nak1v3kqxoam6h4f3kjkbye7g&st=vnbvlqrz", 'ldap.yml', 'ldap-yml')                        
+            //         },
+            //         'Database.yml': {
+            //             downloadAndStash("https://dl.dropboxusercontent.com/scl/fi/7368hynz2bz75cl13zqlm/database.yml?rlkey=1z4jm6qjvy95jrb11nmhxczlo&st=ry5b6cbq", 'database.yml', 'database-yml')                                                                        
+            //         }
+            //     )
+            // }
 
             stage('Get PVC'){
                 container('kubectl') {

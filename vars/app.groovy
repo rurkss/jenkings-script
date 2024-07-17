@@ -21,8 +21,8 @@ def call() {
             ),
             containerTemplate(
                 name: 'kubectl',
-                command: '/bin/sh -c "while true; do sleep 3600; done"',
-                image: 'd3fk/kubectl:v1.29',
+                command: 'cat',
+                image: 'rurkss/kubectl:v1.0',
                 ttyEnabled: true,
                 resourceRequestMemory: "100Mi",
                 resourceRequestCpu: "50m",

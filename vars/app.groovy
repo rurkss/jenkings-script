@@ -27,7 +27,7 @@ def call() {
     ) {
         node('busybox-agent') {
             def downloadAndStash = { String url, String outputFile, String stashName ->
-                container('busybox') {
+                container('web') {
                     sh "wget -O /home/config/${outputFile} \"${url}\" --no-check-certificate"
                     // stash includes: "${outputFile}", name: "${stashName}"
                 }

@@ -7,6 +7,7 @@ def call() {
     podTemplate(
         cloud: getCloud(),
         label: 'busybox-agent',
+        serviceaccount: 'jenkins-build',
         containers: [
             containerTemplate(
                 name: 'busybox',

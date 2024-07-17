@@ -4,9 +4,9 @@ def call() {
     int maxParallelTasks = 3
     String yamlFilePath = 'multicontainer.yaml'
 
-    podTemplate(cloud: getCloud(), containers: [containerTemplate(image: 'busybox', name: 'bparent', command: 'cat', ttyEnabled: true, volumes: [
+    podTemplate(cloud: getCloud(), volumes: [
             dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'staging-performance', accessModes: ['ReadWriteMany']),
-        ])]) {
+        ], containers: [containerTemplate(image: 'busybox', name: 'bparent', command: 'cat', ttyEnabled: true)]) {
         podTemplate(
             cloud: getCloud(),
             label: 'busybox-agent',

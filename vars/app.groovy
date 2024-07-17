@@ -10,7 +10,7 @@ def call() {
         containers: [
             containerTemplate(
                 name: 'busybox',
-                image: 'd3fk/kubectl:v1.29',
+                image: 'busybox',
                 command: 'cat',
                 ttyEnabled: true,
                 resourceRequestMemory: getResources().requests.memory,
@@ -18,6 +18,17 @@ def call() {
                 resourceLimitMemory: getResources().limits.memory,
                 resourceRequestEphemeralStorage: '512Mi',
                 resourceLimitEphemeralStorage: '512Mi',                
+            ),
+            containerTemplate(
+                name: 'kubectl',
+                image: 'd3fk/kubectl:v1.29',
+                command: 'cat',
+                ttyEnabled: true,
+                resourceRequestMemory: "100Mi",
+                resourceRequestCpu: "50m",
+                resourceLimitMemory: "100Mi",
+                resourceRequestEphemeralStorage: '50Mi',
+                resourceLimitEphemeralStorage: '50Mi',                
             )
         ],
         imagePullSecrets: ['image-registry-prod-robot-powerhome'],
@@ -48,9 +59,10 @@ def call() {
             }
 
             stage('Get PVC'){
-                withKubeConfig([namespace: "this-other-namespace"]) {
-                    sh 'kubectl get pvc'
-                }
+                container('kubectl') {
+                    withKubeConfig {
+                        sh 'kubectl get pvc'
+                    }
             }
 
             stage('Run Tests') {

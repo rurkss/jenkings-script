@@ -5,7 +5,7 @@ def call() {
     String yamlFilePath = 'multicontainer.yaml'
 
     podTemplate(cloud: getCloud(), volumes: [
-            dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'staging-performance', accessModes: ['ReadWriteMany']),
+            dynamicPVC(mountPath: '/home/config', requestsSize: '5Gi', storageClassName: 'staging-performance', accessModes: 'ReadWriteMany'),
         ], containers: [containerTemplate(image: 'busybox', name: 'bparent', command: 'cat', ttyEnabled: true)]) {
         podTemplate(
             cloud: getCloud(),

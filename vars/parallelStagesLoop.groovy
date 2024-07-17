@@ -27,6 +27,11 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                             container('web') {
                                 stage("Unstashing Files") {
                                     parallel(
+                                        'Volume': {
+                                            sh '''  
+                                              ls -all /home/config
+                                            '''                                            
+                                        },
                                         'Config.yml': {
                                             unstash 'config-yml'
                                             sh '''  

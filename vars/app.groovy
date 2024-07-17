@@ -63,6 +63,7 @@ def call() {
                     withKubeConfig {
                         sh 'kubectl get pvc'
                     }
+                }
             }
 
             stage('Run Tests') {

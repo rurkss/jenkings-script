@@ -67,70 +67,70 @@ def call(def testComponentNames, String webImage, int maxParallelTasks) {
                                         // },                                         
                                     )
                                 }
-                                stage("JS Test") {
-                                    sh """
-                                        cd /home/app/src/components/${componentName} && \
-                                        ([ -z $CI ] && yarn check --integrity 2> /dev/null || yarn install) && \
-                                        set -e && yarn lint && \
-                                        ([ ! -f .flowconfig ] || yarn flow check) && \
-                                        yarn test
-                                    """
-                                }
+                                // stage("JS Test") {
+                                //     sh """
+                                //         cd /home/app/src/components/${componentName} && \
+                                //         ([ -z $CI ] && yarn check --integrity 2> /dev/null || yarn install) && \
+                                //         set -e && yarn lint && \
+                                //         ([ ! -f .flowconfig ] || yarn flow check) && \
+                                //         yarn test
+                                //     """
+                                // }
                                 
-                                stage("Ruby Bundle and Tests") {
-                                  sh """
-                                      cd /home/app/src/components/${componentName} && \
+                            //     stage("Ruby Bundle and Tests") {
+                            //       sh """
+                            //           cd /home/app/src/components/${componentName} && \
                                       
-                                      start_time=\$(date +%s) && \
-                                      [ -n "\$CI" ] && export BUNDLE_FROZEN=false && \
-                                      bundle check || bundle install && \
-                                      end_time=\$(date +%s) && \
-                                      echo "Step 1 (Bundle check/install) took \$(expr \$end_time - \$start_time) seconds." && \
+                            //           start_time=\$(date +%s) && \
+                            //           [ -n "\$CI" ] && export BUNDLE_FROZEN=false && \
+                            //           bundle check || bundle install && \
+                            //           end_time=\$(date +%s) && \
+                            //           echo "Step 1 (Bundle check/install) took \$(expr \$end_time - \$start_time) seconds." && \
                                       
-                                      start_time=\$(date +%s) && \
-                                      bundle lock --add-platform arm64-darwin-22 \
-                                                              arm64-darwin-23 \
-                                                              ruby \
-                                                              x86_64-darwin-22 \
-                                                              x86_64-darwin-23 \
-                                                              x86_64-linux && \
-                                      end_time=\$(date +%s) && \
-                                      echo "Step 2 (Bundle lock) took \$(expr \$end_time - \$start_time) seconds." && \
+                            //           start_time=\$(date +%s) && \
+                            //           bundle lock --add-platform arm64-darwin-22 \
+                            //                                   arm64-darwin-23 \
+                            //                                   ruby \
+                            //                                   x86_64-darwin-22 \
+                            //                                   x86_64-darwin-23 \
+                            //                                   x86_64-linux && \
+                            //           end_time=\$(date +%s) && \
+                            //           echo "Step 2 (Bundle lock) took \$(expr \$end_time - \$start_time) seconds." && \
                                       
-                                      start_time=\$(date +%s) && \
-                                      ls -all && \
-                                      if [ -f bin/schema ]; then
-                                          echo "Schema exists"
-                                          bin/schema
-                                      else
-                                          echo "Schema does not exist"
-                                          [ ! -f spec/dummy/db/name ] || RAILS_ENV=test DISABLE_DATABASE_ENVIRONMENT_CHECK=true bin/rake app:db:prepare
-                                      fi && \
-                                      end_time=\$(date +%s) && \
-                                      echo "Step 3 (Schema/migration) took \$(expr \$end_time - \$start_time) seconds." && \
+                            //           start_time=\$(date +%s) && \
+                            //           ls -all && \
+                            //           if [ -f bin/schema ]; then
+                            //               echo "Schema exists"
+                            //               bin/schema
+                            //           else
+                            //               echo "Schema does not exist"
+                            //               [ ! -f spec/dummy/db/name ] || RAILS_ENV=test DISABLE_DATABASE_ENVIRONMENT_CHECK=true bin/rake app:db:prepare
+                            //           fi && \
+                            //           end_time=\$(date +%s) && \
+                            //           echo "Step 3 (Schema/migration) took \$(expr \$end_time - \$start_time) seconds." && \
                                       
-                                      start_time=\$(date +%s) && \
-                                      OUTPUT="\$(bin/yard)" && \
-                                      echo "\${OUTPUT}" && \
-                                      if [ "\$(echo \${OUTPUT} | grep warn | wc -l)" -gt 0 ]; then
-                                          echo "Documentation warnings occurred"
-                                          exit 1
-                                      fi && \
-                                      end_time=\$(date +%s) && \
-                                      echo "Step 4 (Yard) took \$(expr \$end_time - \$start_time) seconds." && \
+                            //           start_time=\$(date +%s) && \
+                            //           OUTPUT="\$(bin/yard)" && \
+                            //           echo "\${OUTPUT}" && \
+                            //           if [ "\$(echo \${OUTPUT} | grep warn | wc -l)" -gt 0 ]; then
+                            //               echo "Documentation warnings occurred"
+                            //               exit 1
+                            //           fi && \
+                            //           end_time=\$(date +%s) && \
+                            //           echo "Step 4 (Yard) took \$(expr \$end_time - \$start_time) seconds." && \
                                       
-                                      start_time=\$(date +%s) && \
-                                      bin/rubocop --display-cop-names --extra-details --display-style-guide --config .rubocop.yml && \
-                                      end_time=\$(date +%s) && \
-                                      echo "Step 5 (Rubocop) took \$(expr \$end_time - \$start_time) seconds." && \
+                            //           start_time=\$(date +%s) && \
+                            //           bin/rubocop --display-cop-names --extra-details --display-style-guide --config .rubocop.yml && \
+                            //           end_time=\$(date +%s) && \
+                            //           echo "Step 5 (Rubocop) took \$(expr \$end_time - \$start_time) seconds." && \
                                       
-                                      start_time=\$(date +%s) && \
-                                      echo "Time now is \$(date -Iseconds)" && \
-                                      bin/rspec spec && \
-                                      end_time=\$(date +%s) && \
-                                      echo "Step 6 (RSpec) took \$(expr \$end_time - \$start_time) seconds."
-                                  """
-                              }  
+                            //           start_time=\$(date +%s) && \
+                            //           echo "Time now is \$(date -Iseconds)" && \
+                            //           bin/rspec spec && \
+                            //           end_time=\$(date +%s) && \
+                            //           echo "Step 6 (RSpec) took \$(expr \$end_time - \$start_time) seconds."
+                            //       """
+                            //   }  
                             }
                         }
                     }

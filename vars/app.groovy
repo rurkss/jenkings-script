@@ -39,8 +39,8 @@ def call() {
                 resourceRequestMemory: "100Mi",
                 resourceRequestCpu: "50m",
                 resourceLimitMemory: "100Mi",
-                resourceRequestEphemeralStorage: '50Mi',
-                resourceLimitEphemeralStorage: '50Mi',                
+                resourceRequestEphemeralStorage: '1Gi',
+                resourceLimitEphemeralStorage: '1Gi',                
             )
         ],
         imagePullSecrets: ['image-registry-prod-robot-powerhome'],

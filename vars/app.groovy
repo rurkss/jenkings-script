@@ -3,10 +3,10 @@ def call() {
     String webImage = 'image-registry.powerapp.cloud/nitro-web/nitro_web:ef524524941664af5a6a79e23ad4412ed36743f1@sha256:0c99acd6ac00584ccc90a08800532faedbbcac55908053549974d6bc6a18dab1'
     int maxParallelTasks = 3
     String yamlFilePath = 'multicontainer.yaml'
-
+    String label = 'busybox-agent'
     podTemplate(
         cloud: getCloud(),
-        label: 'busybox-agent',
+        label: label,
         serviceAccount: 'jenkins-build',
         containers: [
             containerTemplate(
@@ -61,8 +61,8 @@ def call() {
 
             stage('Get PVC'){
                 container('kubectl') {
-                    withKubeConfig(credentialsId: 'hq-07-16') {
-                        sh 'kubectl get pvc'
+                    withKubeConfig{
+                        sh "kubectl get pvc -l jenkins/label=${label} -o=jsonpath='{.items[*].metadata.name}'"
                     }
                 }
             }

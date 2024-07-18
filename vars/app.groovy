@@ -30,6 +30,17 @@ def call() {
                 resourceLimitMemory: "100Mi",
                 resourceRequestEphemeralStorage: '50Mi',
                 resourceLimitEphemeralStorage: '50Mi',                
+            ),
+            containerTemplate(
+                name: 'artifacts',
+                command: '/bin/cat',
+                image: 'image-registry.powerapp.cloud/nitro-web/artifacts:d58921468509716048131a73539062ffacaf7592@sha256:0e5c281524ddcc94dc5a9834608b50fb9829d2246c88ee1966a4fe3c94520aba',
+                ttyEnabled: true,
+                resourceRequestMemory: "100Mi",
+                resourceRequestCpu: "50m",
+                resourceLimitMemory: "100Mi",
+                resourceRequestEphemeralStorage: '50Mi',
+                resourceLimitEphemeralStorage: '50Mi',                
             )
         ],
         imagePullSecrets: ['image-registry-prod-robot-powerhome'],
@@ -59,17 +70,23 @@ def call() {
             //     )
             // }
 
-            stage('Get PVC'){
-                container('kubectl') {
-                    withKubeConfig{
-                        sh "kubectl get pvc -l jenkins/label=${label} -o=jsonpath='{.items[*].metadata.name}'"
-                    }
-                }
+            // stage('Get PVC'){
+            //     container('kubectl') {
+            //         withKubeConfig{
+            //             sh "kubectl get pvc -l jenkins/label=${label} -o=jsonpath='{.items[*].metadata.name}'"
+            //         }
+            //     }
             }
 
-            stage('Run Tests') {
-                parallelStagesLoop(testComponentNames, webImage, maxParallelTasks)
+            stage('Artifacts'){
+                container('artifacts') {
+                    sh "ls -all /home"
+                }            
             }
+
+            // stage('Run Tests') {
+            //     parallelStagesLoop(testComponentNames, webImage, maxParallelTasks)
+            // }
         }
     }
 }

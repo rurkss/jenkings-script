@@ -36,7 +36,7 @@ def call() {
                 name: 'docker',
                 image: 'docker:27.0.3-dind',
                 ttyEnabled: true,
-                privileged: true,
+                // privileged: true,
                 args: '--registry-mirror https://docker-proxy.image-registry.powerapp.cloud --mtu=1480',
                 resourceRequestMemory: "100Mi",
                 resourceRequestCpu: "50m",

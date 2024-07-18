@@ -76,7 +76,7 @@ def call() {
             //             sh "kubectl get pvc -l jenkins/label=${label} -o=jsonpath='{.items[*].metadata.name}'"
             //         }
             //     }
-            }
+            // }
 
             stage('Artifacts'){
                 container('artifacts') {

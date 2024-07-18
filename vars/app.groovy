@@ -80,7 +80,7 @@ def call() {
 
             stage('Artifacts') {
                 container('docker') {
-                    sh "docker run --rm ${artifactImage} sh -c 'ls -all'"
+                    sh "ls -all"
                 }            
             }
 

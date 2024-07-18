@@ -4,6 +4,7 @@ def call() {
     int maxParallelTasks = 3
     String yamlFilePath = 'multicontainer.yaml'
     String label = 'busybox-agent'
+    String artifactImage = 'image-registry.powerapp.cloud/nitro-web/artifacts:d58921468509716048131a73539062ffacaf7592@sha256:0e5c281524ddcc94dc5a9834608b50fb9829d2246c88ee1966a4fe3c94520aba'
     podTemplate(
         cloud: getCloud(),
         label: label,
@@ -22,7 +23,7 @@ def call() {
             ),
             containerTemplate(
                 name: 'kubectl',
-                command: '/bin/cat',
+                command: 'cat',
                 image: 'rurkss/kubectl:v1.2',
                 ttyEnabled: true,
                 resourceRequestMemory: "100Mi",
@@ -32,9 +33,8 @@ def call() {
                 resourceLimitEphemeralStorage: '50Mi',                
             ),
             containerTemplate(
-                name: 'artifacts',
-                command: '/bin/cat',
-                image: 'image-registry.powerapp.cloud/nitro-web/artifacts:d58921468509716048131a73539062ffacaf7592@sha256:0e5c281524ddcc94dc5a9834608b50fb9829d2246c88ee1966a4fe3c94520aba',
+                name: 'docker',
+                image: 'docker:27.0.3-dind',
                 ttyEnabled: true,
                 resourceRequestMemory: "100Mi",
                 resourceRequestCpu: "50m",
@@ -78,9 +78,9 @@ def call() {
             //     }
             // }
 
-            stage('Artifacts'){
-                container('artifacts') {
-                    sh "ls -all /home"
+            stage('Artifacts') {
+                container('docker') {
+                    sh "docker run --rm ${artifactImage} sh -c 'ls -all'"
                 }            
             }
 
